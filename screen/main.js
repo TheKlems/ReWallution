@@ -1,12 +1,23 @@
 var airconsole;
+var engine;
+var render;
 
 
 function init() {
-	setupConsole();
+	setupAirconsole();
+	setupMatter();
+	states.menuStart();
 }
 
+function setupMatter() {
+	engine = Matter.Engine.create();
+	render = Matter.Engine.create({
+		element: document.body,
+		engine: engine
+	});
+}
 
-function setupConsole() {
+function setupAirconsole() {
 	airconsole = new AirConsole();
 	console.log("hi console");
 	airconsole.onConnect = function(device_id) {
