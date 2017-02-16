@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script type="text/javascript" src="libs/jquery.js"></script>
 		<script type="text/javascript" src="libs/airconsole.js"></script>
 		<script type="text/javascript" src="libs/matter.js"></script>
 		<script type="text/javascript" src="screen/main.js"></script>
 		<script type="text/javascript" src="screen/states.js"></script>
 		<script type="text/javascript" src="screen/player.js"></script>
+		<script type="text/javascript">
+			$(function() { init() });
+		</script>
+
 	</head>
-	<body onload='init()'>
+	<body>
 		<div class='game'>
 			<canvas id='canvas'></canvas>
 			<div id='score'>0:0</div>
