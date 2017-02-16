@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="css/screen.css">
 		<script type="text/javascript" src="libs/jquery.js"></script>
 		<script type="text/javascript" src="libs/airconsole.js"></script>
 		<script type="text/javascript" src="libs/matter.js"></script>
@@ -8,15 +9,14 @@
 		<script type="text/javascript" src="screen/states.js"></script>
 		<script type="text/javascript" src="screen/player.js"></script>
 		<script type="text/javascript">
-			$(function() { init() });
+			$(function() { init(); });
 		</script>
 
 	</head>
 	<body>
-		<div class='game'>
-			<canvas id='canvas'></canvas>
-			<div id='score'>0:0</div>
-			<div id='wait'></div>
-		</div>
+		<!-- home menu screen -->
+		<div class="container container-menu"></div>
+		<!-- game screen -->
+		<div class="container container-game"></div>
 	</body>
 </html>
