@@ -4,7 +4,7 @@ var states = {
 	menuStart: function () {
 		$(".container-menu").show();
 
-		users = [];
+		users = {};
 
 		airconsole.onConnect = function(id) {
 			users[id] = new User(id);
@@ -68,7 +68,7 @@ var states = {
 			airconsole.message(this.id, JSON.stringify({"action" : action}));
 		};
 
-		User.prototype.onAction = function() {};
+		User.prototype.onAction = function(actionString) {};
 	},
 
 
