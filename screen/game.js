@@ -46,36 +46,45 @@ function create() {
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
 	trump.hasBlock = true;
-	console.log(trump.block);
 
 	players = [];
-	console.log(users);
 
 	for (var u in users) {
 
 		if (users[u].isTrump) {
+			trump.user = users[u];
+			trump.user.onAction = function(action) {
+				if (action == 'drop' && trump.hasBlock) {
+					trump.block.setAll('velocity.y', 200);
+					trump.hasBlock = false;
+				}
+			};
+
 			continue;
 		}
 
 		var player = game.add.sprite(32 + u * 160, game.world.height - 350, 'mexican');
-		player.jump = function () {
-			player.body.velocity.y = -450;
-		}
-
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
-				player.jump();
+				player.body.velocity.y = -450;
+			}
+
+			else if (action == 'switch') {
+				player.body.velocity.x *= -1;
 			}
 		}
+
 		game.physics.arcade.enable(player);
 		player.body.gravity.y = 600;
 		player.body.collideWorldBounds = true;	
 		player.body.velocity.x = 150;
 		player.body.bounce.x = 1;
 		players.push(player);
-		console.log(player);
 	}
+
+	
+
 }
 
 function update() {
@@ -96,12 +105,6 @@ function updatePlayers () {
 function updateTrump () {
 
 	game.physics.arcade.collide(trump, walls);
-	if (game.input.keyboard.createCursorKeys().down.isDown
-		&& trump.hasBlock) {
-		console.log("down");
-		trump.block.setAll('velocity.y', 200);
-		trump.hasBlock = false;
-	}
 }
 
 function updateBlock () {
