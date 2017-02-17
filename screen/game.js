@@ -3,7 +3,8 @@ var game,
 	trump,
 	blocks,
 	walls,
-	platforms;
+	platforms,
+	fixedBlocks;
 
 function game_init() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
@@ -31,6 +32,9 @@ function create() {
 	game.stage.disableVisibilityChange = true;
 
 	game.add.image(0, 0, 'background');
+
+	fixedBlocks = game.add.group();
+	fixedBlocks.enableBody = true;
 
 	platforms = game.add.group();
 	platforms.enableBody = true;
@@ -62,6 +66,7 @@ function create() {
 			trump.user.onAction = function(action) {
 				if (action == 'drop' && trump.hasBlock) {
 					trump.block.setAll('body.velocity.y', 200);
+					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
 				}
 			};
@@ -118,10 +123,36 @@ function updateTrump () {
 
 function updateBlock () {
 	
+	game.physics.arcade.collide(trump.block, platforms, landed);
+	
+	game.physics.arcade.collide(trump.block, players, playerHit);
+	/*
+	if(fixedBlocks.length>0){
+		for(g in fixedBlocks){
+			game.physics.arcade.collide(trump.block, fixedBlocks[g], landed);
+		}
+	}
+	*/
 	if(trump.hasBlock){
 		trump.block.x = trump.body.x;
-	}else{
-		trump.block.y = trump.block.y+10;
+	}
+}
+
+function landed(){
+	//console.log("start landed");
+	trump.block.setAll('body.velocity.y', 0);
+	fixedBlocks.add(trump.block);
+	trump.block = game.add.group();
+	getRandomBlock(trump.block);
+	trump.hasBlock = true;
+	//console.log("end landed");
+}
+
+function playerHit(){
+	for(p in players){
+		if(players[p].body.touching.up){
+			players[p].kill();
+		}
 	}
 }
 
