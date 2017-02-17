@@ -5,9 +5,9 @@
 		<script type="text/javascript" src="libs/jquery.js"></script>
 		<script type="text/javascript" src="libs/airconsole.js"></script>
 		<script type="text/javascript" src="libs/matter.js"></script>
-		<script type="text/javascript" src="screen/main.js"></script>
 		<script type="text/javascript" src="screen/states.js"></script>
 		<script type="text/javascript" src="screen/player.js"></script>
+		<script type="text/javascript" src="screen/main.js"></script>
 		<script type="text/javascript">
 			$(function() { init(); });
 		</script>
@@ -15,7 +15,15 @@
 	</head>
 	<body>
 		<!-- home menu screen -->
-		<div class="container container-menu"></div>
+		<div class="container container-menu">
+			<div class="message-wait">
+				Waiting for players...
+			</div>
+			<div class="user-div user-div-generic">
+				<div class="user-name"></div>
+				<img class="user-picture"></img>
+			</div>
+		</div>
 		<!-- game screen -->
 		<div class="container container-game"></div>
 	</body>
