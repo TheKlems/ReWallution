@@ -56,9 +56,11 @@ var states = {
 					users[id].clientAction(actionToSend);
 				}
 
-				$('.container').hide();
-				$('.container-game').show();
-				states.game();
+				window.setTimeout(function() {
+					$('.container').hide();
+					$('.container-game').show();
+					states.game();
+				}, 5000);
 			}
 			else {
 				this.onAction(action);
