@@ -14,16 +14,33 @@ function game_init() {
 
 function preload() {
 
-	game.load.image('background', 'assets/background.png');
-	game.load.image('ground', 'assets/ground.png');
-	game.load.image('wall', 'assets/wall.png');
-	game.load.image('block', 'assets/block.png');
-	game.load.image('mexican', 'assets/mexican.png');
-	game.load.image('trump', 'assets/trump.png');
+	var imageKeys = ['background', 'ground', 'wall', 'block', 'mexican', 'trump'];
+	for (k in imageKeys) {
+		var key = imageKeys[k];
+		game.load.image(key, 'assets/' + key + '.png');
+	}
 
-	game.load.audio('si-senor', 'sounds/si-senor.ogg');
-	game.sound.add('si-senor');
-	console.log(game.sound.getItem('si-senor'));
+	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
+	for (k in mexicanSoundKeys) {
+		var key = mexicanSoundKeys[k];
+		game.load.audio(key, 'sounds/' + key + '.mp3');
+		game.sound.add(key);
+	}
+
+	game.sound.mexican = function () {
+		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
+	};
+
+	var trumpSoundKeys = ['build-a-wall'];
+	for (k in trumpSoundKeys) {
+		var key = trumpSoundKeys[k];
+		game.load.audio(key, 'sounds/' + key + '.mp3');
+		game.sound.add(key);
+	}
+
+	game.sound.trump = function () {
+		return trumpSoundKeys[Math.floor(Math.random() * trumpSoundKeys.length)];
+	};
 }
 
 function create() {
@@ -68,6 +85,7 @@ function create() {
 					trump.block.setAll('body.velocity.y', 200);
 					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
+					game.sound.play(game.sound.trump());
 				}
 			};
 
@@ -81,7 +99,7 @@ function create() {
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
 				player.body.velocity.y = -450;
-				game.sound.play('si-senor');
+				game.sound.play(game.sound.mexican());
 			}
 
 			else if (action == 'switch') {
