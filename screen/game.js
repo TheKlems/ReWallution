@@ -9,8 +9,6 @@ function game_init() {
 	game = new Phaser.Game(880, 880, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
-
-	$('.container-game').show();
 }
 
 function preload() {

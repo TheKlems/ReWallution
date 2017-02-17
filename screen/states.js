@@ -57,6 +57,7 @@ var states = {
 				}
 
 				$('.container').hide();
+				$('.container-game').show();
 				states.game();
 			}
 			else {
