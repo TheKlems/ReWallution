@@ -31,7 +31,7 @@ function preload() {
 		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
 	};
 
-	var trumpSoundKeys = ['build-a-wall'];
+	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist'];
 	for (k in trumpSoundKeys) {
 		var key = trumpSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
