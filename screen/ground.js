@@ -1,4 +1,0 @@
-class Ground {
-	constructor(body) {
-	}
-}

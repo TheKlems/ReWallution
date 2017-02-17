@@ -6,7 +6,7 @@ var game,
 	platforms;
 
 function game_init() {
-	game = new Phaser.Game(880, 880, Phaser.CANVAS,
+	game = new Phaser.Game(960, 800, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
 }
@@ -29,7 +29,7 @@ function create() {
 
 	game.add.sprite(0, 0, 'background');
 
-	var ground = platforms.create(0, game.world.height - 64,
+	var ground = platforms.create(0, game.world.height - game.cache.getItem('ground', 'height'),
 		'ground');
 	ground.body.immovable = true;
 
