@@ -30,7 +30,11 @@ var states = {
 			if (action == "start-trump") {
 				this.isTrump = true;
 
-				this.displayView("trump");
+				this.transitionGame("trump");
+
+				
+
+
 			}
 			else if (action == "start-mexican") {
 				this.displayView("mexican");
@@ -50,7 +54,40 @@ var states = {
 		User.prototype.displayView = function(view) {
 			$(".container").hide();
 			$(".container-" + view).show();
-		}
+		};
+
+		User.prototype.transitionGame = function(role) {
+			// copy of reference
+			var user = this;
+
+			var actionsT = [
+				function() {
+					user.displayView("info");
+				},
+				function() {
+					user.displayView("info-"+role);
+				},
+				function() {
+					user.displayView("countdown");
+					$("#countdown-div").text("3")
+				},
+				function() {
+					$("#countdown-div").text("2");
+				},
+				function() {
+					$("#countdown-div").text("1");
+				},
+				function() {
+					user.displayView(role);
+				}
+			]
+			var i = 0;
+			window.setInterval(function() {
+				actionsT[i]();
+				i++;
+			}, 1000);
+
+		};
 	},
 
 
