@@ -1,20 +1,35 @@
 var airconsole;
 var engine;
 var render;
+var runner;
+
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies;
 
 
 function init() {
-	setupAirconsole();
+	//setupAirconsole();
 	setupMatter();
-	states.menuStart();
+	states.game();
 }
 
 function setupMatter() {
-	engine = Matter.Engine.create();
-	render = Matter.Engine.create({
-		element: document.body,
-		engine: engine
+	runner = Runner.create({
+		delta: 1000 / 60,
+		enabled: true
 	});
+	engine = Engine.create();
+	console.log($('body'));
+	render = Render.create({
+		element: $('game'),
+		engine: engine,
+		wireframes: true
+	});
+
+	
 }
 
 function setupAirconsole() {

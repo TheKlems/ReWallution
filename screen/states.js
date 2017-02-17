@@ -6,7 +6,11 @@ var states = {
 		console.log("Menu");
 	},
 	game: function () {
-		console.log("Menu");
+
+		player = new Player(10, 10);
+
+		Engine.run(engine);
+		Render.run(render);
 	},
 	mexicanWins: function () {
 		console.log("Menu");
