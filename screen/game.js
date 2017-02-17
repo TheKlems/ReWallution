@@ -177,7 +177,6 @@ function updateBlock () {
 }
 
 function landed(){
-
 	if (!blockCollisionFlag) {
 		console.log("collision sol ou autre bloc");
 		trump.block.setAll('body.velocity.y', 0);
@@ -186,9 +185,9 @@ function landed(){
 		getRandomBlock(trump.block);
 		trump.hasBlock = true;
 		//console.log("end landed");
-
 		blockCollisionFlag = true;
 		game.sound.play('brick-landed', 0.2);
+		flag = true;
 	}
 	
 }
