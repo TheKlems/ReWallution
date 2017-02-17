@@ -177,14 +177,7 @@ function updateBlock () {
 }
 
 function landed(){
-	console.log("collision sol ou autre bloc");
-	trump.block.setAll('body.velocity.y', 0);
-	fixedBlocks.add(trump.block);
-	trump.block = game.add.group();
-	getRandomBlock(trump.block);
-	trump.hasBlock = true;
-	game.sound.play('brick-landed', 0.2);
-	//console.log("end landed");
+
 	if (!blockCollisionFlag) {
 		console.log("collision sol ou autre bloc");
 		trump.block.setAll('body.velocity.y', 0);
@@ -195,6 +188,7 @@ function landed(){
 		//console.log("end landed");
 
 		blockCollisionFlag = true;
+		game.sound.play('brick-landed', 0.2);
 	}
 	
 }
