@@ -3,7 +3,8 @@ var game,
 	trump,
 	blocks,
 	walls,
-	platforms;
+	platforms,
+	fixedBlocks;
 
 function game_init() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
@@ -28,6 +29,12 @@ function create() {
 
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.stage.disableVisibilityChange = true;
+
+	fixedBlocks = game.add.group();
+	fixedBlocks.enableBody = true;
+
+	platforms = game.add.group();
+	platforms.enableBody = true;
 
 	game.add.image(0, 0, 'background');
 
@@ -113,11 +120,30 @@ function updateTrump () {
 }
 
 function updateBlock () {
-	
+	game.physics.arcade.collide(trump.block, platforms, landed);
+	game.physics.arcade.collide(trump.block, players, playerHit);
+
 	if(trump.hasBlock){
 		trump.block.x = trump.body.x;
-	}else{
-		trump.block.y = trump.block.y+10;
+	}
+
+
+}
+function landed(){
+	//console.log("start landed");
+	trump.block.setAll('body.immovable', true);
+	fixedBlocks.add(trump.block);
+	trump.block = game.add.group();
+	getRandomBlock(trump.block);
+	trump.hasBlock = true;
+	//console.log("end landed");
+}
+
+function playerHit(){
+	for(p in players){
+		if(players[p].body.touching.up){
+			players[p].kill();
+		}
 	}
 }
 

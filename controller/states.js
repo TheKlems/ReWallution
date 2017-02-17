@@ -2,6 +2,8 @@ var states = {
 	menuStart: function () {
 		$(".container-menu").show();
 
+		console.log(airconsole.getDeviceId());
+
 		var user = new User(airconsole.getDeviceId());
 
 		// airconsole API events bindings
@@ -18,9 +20,14 @@ var states = {
 
 		function User(id) {
 			this.id = id;
+			console.log(id);
 			this.username = airconsole.getNickname(id);
+			console.log(this.username);
 			this.picture = airconsole.getProfilePicture(id);
 			this.isTrump = false;
+
+			$("#nickname").html(this.username);
+			console.log("######################################################");
 		}
 
 		User.prototype.updateData = function(json) {
@@ -61,6 +68,7 @@ var states = {
 			var actionsT = [
 				function() {
 					user.displayView("info-"+role);
+					airconsole.vibrate(1000);
 				},
 				function() {
 					user.displayView("countdown");
@@ -85,7 +93,6 @@ var states = {
 					window.clearInterval(interval);
 				};
 			}, 1000);
-
 		};
 	},
 
