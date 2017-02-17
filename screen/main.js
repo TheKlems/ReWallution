@@ -1,20 +1,8 @@
 var airconsole;
-var engine;
-var render;
-
 
 function init() {
-	setupAirconsole();
-	setupMatter();
-	states.menuStart();
-}
-
-function setupMatter() {
-	engine = Matter.Engine.create();
-	render = Matter.Engine.create({
-		element: document.body,
-		engine: engine
-	});
+	//setupAirconsole();
+	states.game();
 }
 
 function setupAirconsole() {

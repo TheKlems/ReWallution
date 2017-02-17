@@ -70,9 +70,7 @@ var states = {
 	startTransition: function () {
 		console.log("Menu");
 	},
-	game: function () {
-		console.log("Menu");
-	},
+	game: function () {game_init()},
 	mexicanWins: function () {
 		console.log("Menu");
 	},
