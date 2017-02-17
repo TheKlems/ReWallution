@@ -63,7 +63,7 @@ var states = {
 			airconsole.message(this.id, JSON.stringify({"action" : action}));
 		};
 
-		User.prototype.onAction = function() {};
+		User.prototype.onAction = function(actionString) {};
 	},
 
 
