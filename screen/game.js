@@ -50,6 +50,7 @@ function create() {
 	trump.body.velocity.x = trump.velocity.x;
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
+	trump.hasBlock = true;
 	console.log(trump.block);
 
 	for (var p in players) {
@@ -90,12 +91,21 @@ function updateTrump () {
 		trump.velocity.x *= -1;
 		trump.body.velocity.x = trump.velocity.x;
 	}
+	if (game.input.keyboard.createCursorKeys().down.isDown
+			&& trump.hasBlock) {
+			trump.block.setAll('velocity.y', 200);
+			trump.hasBlock = false;
+	}
 }
 
 function updateBlock () {
 	
 	console.log(trump);
-	trump.block.x = trump.body.x;
+	if(trump.hasBlock){
+		trump.block.x = trump.body.x;
+	}else{
+		trump.block.y = trump.block.y+10;
+	}
 }
 
 function getRandomBlock(group) {
