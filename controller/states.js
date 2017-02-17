@@ -85,7 +85,6 @@ var states = {
 					window.clearInterval(interval);
 				};
 			}, 1000);
-
 		};
 	},
 

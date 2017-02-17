@@ -56,3 +56,11 @@ button:active {
 body {
 	background-color: black;
 }
+
+.ui-font-l {
+	font-family: 'Luckiest Guy';
+	text-align: center;
+	height: 20vh;
+	margin-top: 40vh;
+	font-size: 15vh;
+}
