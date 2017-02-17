@@ -29,9 +29,10 @@ function create() {
 
 	game.add.sprite(0, 0, 'background');
 
-	var ground = platforms.create(0, game.world.height - game.cache.getItem('ground', 'height'),
-		'ground');
+	var ground = platforms.create(0, game.world.height 
+		- game.cache.getImage('ground').height, 'ground');
 	ground.body.immovable = true;
+
 
 	walls = game.add.group();
 	walls.enableBody = true;
