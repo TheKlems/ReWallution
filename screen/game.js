@@ -48,10 +48,14 @@ function preload() {
 		game.load.audio(key, 'sounds/' + key + '.mp3');
 		game.sound.add(key);
 	}
+
+	game.load.audio('game-music', 'sounds/game-music.mp3');
+	game.sound.add('game-music');
 }
 
 function create() {
 
+	game.sound.play('game-music', 0.1);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.stage.disableVisibilityChange = true;
 
