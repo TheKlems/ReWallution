@@ -65,6 +65,7 @@ function create() {
 			trump.user.onAction = function(action) {
 				if (action == 'drop' && trump.hasBlock) {
 					trump.block.setAll('body.velocity.y', 200);
+					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
 				}
 			};
@@ -120,8 +121,15 @@ function updateTrump () {
 function updateBlock () {
 	
 	game.physics.arcade.collide(trump.block, platforms, landed);
+	
 	game.physics.arcade.collide(trump.block, players, playerHit);
-
+	/*
+	if(fixedBlocks.length>0){
+		for(g in fixedBlocks){
+			game.physics.arcade.collide(trump.block, fixedBlocks[g], landed);
+		}
+	}
+	*/
 	if(trump.hasBlock){
 		trump.block.x = trump.body.x;
 	}
@@ -129,7 +137,7 @@ function updateBlock () {
 
 function landed(){
 	//console.log("start landed");
-	trump.block.setAll('body.immovable', true);
+	trump.block.setAll('body.velocity.y', 0);
 	fixedBlocks.add(trump.block);
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
