@@ -17,7 +17,7 @@ function preload() {
 	game.load.image('ground', 'assets/ground.png');
 	game.load.image('wall', 'assets/wall.png');
 	game.load.image('mexican', 'assets/mexican.png');
-	//game.load.image('wall', 'assets/wall.png');
+	game.load.image('trump', 'assets/trump.png');
 }
 
 function create() {
@@ -43,19 +43,24 @@ function create() {
 		'mexican'));
 	game.physics.arcade.enable(players);
 
+	trump = game.add.sprite(80, 0, 'trump');
+	game.physics.arcade.enable(trump);
+	trump.velocity = {x: 250, y: 0};
+	trump.body.velocity.x = trump.velocity.x;
+
 	for (var p in players) {
 		player = players[p];
 		player.body.gravity.y = 600;
 		player.body.collideWorldBounds = true;	
-		player.velocity = 150;
-		player.body.velocity.x = player.velocity;
+		player.velocity = {x: 150, y: 0};
+		player.body.velocity.x = player.velocity.x;
 	}
 
 }
 
 function update() {
-	var hitPlatform = game.physics.arcade.collide(players, platforms);
 	updatePlayers();
+	updateTrump();
 }
 
 function updatePlayers () {
@@ -68,9 +73,16 @@ function updatePlayers () {
 		}
 
 		if (game.physics.arcade.collide(player, walls)) {
-			player.velocity *= -1;
-			player.body.velocity.x = player.velocity;
+			player.velocity.x *= -1;
+			player.body.velocity.x = player.velocity.x;
 		}
+	}
+}
+
+function updateTrump () {
+	if (game.physics.arcade.collide(trump, walls)) {
+		trump.velocity.x *= -1;
+		trump.body.velocity.x = trump.velocity.x;
 	}
 }
 
