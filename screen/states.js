@@ -1,6 +1,6 @@
 var states = {
 	menuStart: function () {
-		console.log("Menu");
+		$(".container-menu").show();
 	},
 	startTransition: function () {
 		console.log("Menu");
