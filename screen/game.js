@@ -106,50 +106,50 @@ function getRandomBlock(group) {
 		var version4 = Math.floor((Math.random()*7)+1);
 
 		for (var i = 0; i<nOfBlocks*80; i+=80){
-			group.create(0+i, 150, 'block');
+			group.create((i-nOfBlocks/2)*80, 60, 'block');
 		}
 		if(nOfBlocks == 3 && version3 == 2){
-			group.xy(0,300,50);
-			group.xy(1,380,50);
-			group.xy(2,380,130);
+			group.xy(0,-80,60);
+			group.xy(1,0,60);
+			group.xy(2,0,140);
 		}
 		if(nOfBlocks==4){
 			switch(version4){
 				case 1:
-					group.xy(0,250,50);
-					group.xy(1,330,50);
-					group.xy(2,410,50);
-					group.xy(3,330,130);
+					group.xy(0,-120,60);
+					group.xy(1,-40,60);
+					group.xy(2,40,60);
+					group.xy(3,-40,140);
 					break;
 				case 2:
-					group.xy(0,250,50);
-					group.xy(1,330,50);
-					group.xy(2,410,50);
-					group.xy(3,250,130);
+					group.xy(0,-120,60);
+					group.xy(1,-40,60);
+					group.xy(2,40,60);
+					group.xy(3,-120,140);
 					break;
 				case 3:
-					group.xy(0,250,50);
-					group.xy(1,330,50);
-					group.xy(2,410,50);
-					group.xy(3,410,130);
+					group.xy(0,-120,60);
+					group.xy(1,-40,60);
+					group.xy(2,40,60);
+					group.xy(3,40,140);
 					break;
 				case 4:
-					group.xy(0,250,50);
-					group.xy(1,330,50);
-					group.xy(2,330,130);
-					group.xy(3,410,130);
+					group.xy(0,-120,60);
+					group.xy(1,-40,60);
+					group.xy(2,-40,140);
+					group.xy(3,40,140);
 					break;
 				case 5:
-					group.xy(0,250,130);
-					group.xy(1,330,130);
-					group.xy(2,330,50);
-					group.xy(3,410,50);
+					group.xy(0,-120,140);
+					group.xy(1,-40,140);
+					group.xy(2,-40,60);
+					group.xy(3,40,60);
 					break;
 				case 6:
-					group.xy(0,250,50);
-					group.xy(1,330,50);
-					group.xy(2,250,130);
-					group.xy(3,330,130);
+					group.xy(0,-80,60);
+					group.xy(1,0,60);
+					group.xy(2,-80,140);
+					group.xy(3,0,140);
 					break;
 				default:
 					break;
