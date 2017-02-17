@@ -20,8 +20,9 @@ function preload() {
 	game.load.image('mexican', 'assets/mexican.png');
 	game.load.image('trump', 'assets/trump.png');
 
-	console.log(game.load);
 	game.load.audio('si-senor', 'sounds/si-senor.ogg');
+	game.sound.add('si-senor');
+	console.log(game.sound.getItem('si-senor'));
 }
 
 function create() {
@@ -68,12 +69,14 @@ function create() {
 			continue;
 		}
 
-		var player = game.add.sprite(32 + u * 160, game.world.height - 350, 'mexican');
+		var player = game.add.sprite(32 + u * 160, game.world.height 
+			- game.cache.getImage('ground').height 
+			- game.cache.getImage('mexican').height, 'mexican');
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
 				player.body.velocity.y = -450;
-				//game.sound.add('si-senor');
+				game.sound.play('si-senor');
 			}
 
 			else if (action == 'switch') {
