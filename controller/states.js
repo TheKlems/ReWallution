@@ -33,7 +33,7 @@ var states = {
 				this.transitionGame("trump");
 			}
 			else if (action == "start-mexican") {
-				this.displayView("mexican");
+				this.transitionGame("mexican");
 			}
 			else if (action == "drope-false") {
 
@@ -77,12 +77,12 @@ var states = {
 				}
 			]
 			var i = 0;
-			window.setInterval(function() {
+			var interval = window.setInterval(function() {
 				actionsT[i]();
 				i++;
 
 				if (i >= actionsT.length) {
-					window.clearInterval();
+					window.clearInterval(interval);
 				};
 			}, 1000);
 
