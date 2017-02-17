@@ -18,15 +18,33 @@ function game_init() {
 
 function preload() {
 
-	game.load.image('background', 'assets/background.png');
-	game.load.image('ground', 'assets/ground.png');
-	game.load.image('wall', 'assets/wall.png');
-	game.load.image('block', 'assets/block.png');
-	game.load.image('mexican', 'assets/mexican.png');
-	game.load.image('trump', 'assets/trump.png');
+	var imageKeys = ['background', 'ground', 'wall', 'block', 'mexican', 'trump'];
+	for (k in imageKeys) {
+		var key = imageKeys[k];
+		game.load.image(key, 'assets/' + key + '.png');
+	}
 
-	console.log(game.load);
-	game.load.audio('si-senor', 'sounds/si-senor.ogg');
+	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
+	for (k in mexicanSoundKeys) {
+		var key = mexicanSoundKeys[k];
+		game.load.audio(key, 'sounds/' + key + '.mp3');
+		game.sound.add(key);
+	}
+
+	game.sound.mexican = function () {
+		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
+	};
+
+	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist'];
+	for (k in trumpSoundKeys) {
+		var key = trumpSoundKeys[k];
+		game.load.audio(key, 'sounds/' + key + '.mp3');
+		game.sound.add(key);
+	}
+
+	game.sound.trump = function () {
+		return trumpSoundKeys[Math.floor(Math.random() * trumpSoundKeys.length)];
+	};
 }
 
 function create() {
@@ -71,18 +89,21 @@ function create() {
 					trump.block.setAll('body.velocity.y', 200);
 					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
+					game.sound.play(game.sound.trump());
 				}
 			};
 
 			continue;
 		}
 
-		var player = game.add.sprite(32 + u * 160, game.world.height - 350, 'mexican');
+		var player = game.add.sprite(32 + u * 160, game.world.height 
+			- game.cache.getImage('ground').height 
+			- game.cache.getImage('mexican').height, 'mexican');
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
 				player.body.velocity.y = -450;
-				//game.sound.add('si-senor');
+				game.sound.play(game.sound.mexican());
 			}
 
 			else if (action == 'switch') {
