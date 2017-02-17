@@ -123,13 +123,13 @@ function updateBlock () {
 	game.physics.arcade.collide(trump.block, platforms, landed);
 	
 	game.physics.arcade.collide(trump.block, players, playerHit);
-	/*
+	
 	if(fixedBlocks.length>0){
-		for(g in fixedBlocks){
-			game.physics.arcade.collide(trump.block, fixedBlocks[g], landed);
-		}
+		fixedBlocks.forEach(game.physics.arcade.collide, game.physics.arcade, this, trump.block, landed);
+		fixedBlocks.forEach(game.physics.arcade.collide, game.physics.arcade, this, players);
 	}
-	*/
+	
+
 	if(trump.hasBlock){
 		trump.block.x = trump.body.x;
 	}
