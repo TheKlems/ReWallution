@@ -55,6 +55,9 @@ var states = {
 					var actionToSend = (users[id].isTrump ? "start-trump" : "start-mexican");
 					users[id].clientAction(actionToSend);
 				}
+
+				$('.container').hide();
+				states.game();
 			}
 			else {
 				this.onAction(action);

@@ -6,7 +6,7 @@ var game,
 	platforms;
 
 function game_init() {
-	game = new Phaser.Game(960, 880, Phaser.CANVAS,
+	game = new Phaser.Game(880, 880, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
 
@@ -28,6 +28,8 @@ function create() {
 	platforms = game.add.group();
 	platforms.enableBody = true;
 
+	game.add.sprite(0, 0, 'background');
+
 	var ground = platforms.create(0, game.world.height - 64,
 		'ground');
 	ground.body.immovable = true;
@@ -48,6 +50,7 @@ function create() {
 	console.log(trump.block);
 
 	players = [];
+	console.log(users);
 
 	for (var u in users) {
 
@@ -56,7 +59,15 @@ function create() {
 		}
 
 		var player = game.add.sprite(32 + u * 160, game.world.height - 350, 'mexican');
+		player.jump = function () {
+			player.body.velocity.y = -250;
+		}
 		player.user = users[u];
+		player.user.onAction = function(action) {
+			if (action == 'jump') {
+				player.jump();
+			}
+		}
 		game.physics.arcade.enable(player);
 		player.body.gravity.y = 600;
 		player.body.collideWorldBounds = true;	
@@ -77,12 +88,6 @@ function updatePlayers () {
 	for (var p in players) {
 		var player = players[p];
 		game.physics.arcade.collide(player, platforms);
-
-		if (game.input.keyboard.createCursorKeys().up.isDown
-			&& player.body.touching.down) {
-			console.log("up");
-			player.body.velocity.y = -350;	
-		}
 
 		if (game.physics.arcade.collide(player, walls)) {
 			player.velocity.x *= -1;
