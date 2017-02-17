@@ -1,8 +1,10 @@
 var airconsole;
 
 function init() {
-	//setupAirconsole();
-	states.game();
+	setupAirconsole();
+	states.menuStart();
+
+	//states.game();
 }
 
 function setupAirconsole() {

@@ -1,27 +1,44 @@
 .container {
 	display: none;
+	overflow: auto;
 }
 
 .user-div-generic {
 	display: none;
 }
 
+button, .ui-element {
+	width: 48%;
+	height: 100vh;
+	margin-left: 1%;
+	margin-right: 1%;
+	float: left;
+	background-color: white;
+	color: black;
+	padding: 10px;
+	box-sizing: border-box;
+	border: 2px solid gray;
+	border-radius: 10px;
+	transition: background-color 0.1s;
+}
 
+button {
+	font-size: 8em;
+}
 
+button:focus {
+	outline: none;
+}
 
+button:active {
+	background-color: blue;
+}
 
-
-
-
-
-
-
-
-
-
-
+.glyphicon {
+	margin: 1vh;
+}
 
 
 body {
-	background-color: white;
+	background-color: black;
 }
