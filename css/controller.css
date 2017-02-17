@@ -34,6 +34,7 @@ button, .ui-element {
 	border: 2px solid gray;
 	border-radius: 10px;
 	transition: background-color 0.1s;
+	text-align: center;
 }
 
 button {
@@ -63,4 +64,20 @@ body {
 	height: 20vh;
 	margin-top: 40vh;
 	font-size: 15vh;
+}
+
+.ui-font-m {
+	font-family: 'Luckiest Guy';
+	text-align: center;
+	height: 20vh;
+	margin-top: 40vh;
+	font-size: 2em;
+}
+
+.ui-top {
+	margin-top: 10vh;
+}
+
+img {
+	height: 60vh;
 }
