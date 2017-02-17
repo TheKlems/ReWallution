@@ -31,7 +31,7 @@ function preload() {
 		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
 	};
 
-	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist'];
+	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist', 'mexico-pay', 'really-rich'];
 	for (k in trumpSoundKeys) {
 		var key = trumpSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -41,6 +41,13 @@ function preload() {
 	game.sound.trump = function () {
 		return trumpSoundKeys[Math.floor(Math.random() * trumpSoundKeys.length)];
 	};
+
+	var miscSoundKeys = ['jump', 'brick-landed', 'brick-drop'];
+	for (k in miscSoundKeys) {
+		var key = miscSoundKeys[k];
+		game.load.audio(key, 'sounds/' + key + '.mp3');
+		game.sound.add(key);
+	}
 }
 
 function create() {
@@ -86,6 +93,7 @@ function create() {
 					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
 					game.sound.play(game.sound.trump());
+					game.sound.play('brick-drop', 0.7);
 				}
 			};
 
@@ -98,8 +106,10 @@ function create() {
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
+				console.log(player);
 				player.body.velocity.y = -450;
 				game.sound.play(game.sound.mexican());
+				game.sound.play('jump', 0.2);
 			}
 
 			else if (action == 'switch') {
@@ -164,6 +174,7 @@ function landed(){
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
 	trump.hasBlock = true;
+	game.sound.play('brick-landed', 0.2);
 	//console.log("end landed");
 }
 
