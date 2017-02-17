@@ -27,7 +27,7 @@ function create() {
 	platforms = game.add.group();
 	platforms.enableBody = true;
 
-	game.add.sprite(0, 0, 'background');
+	game.add.image(0, 0, 'background');
 
 	var ground = platforms.create(0, game.world.height 
 		- game.cache.getImage('ground').height, 'ground');
