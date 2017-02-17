@@ -68,11 +68,11 @@ var states = {
 			var actionsT = [
 				function() {
 					user.displayView("info-"+role);
-					airconsole.vibrate(1000);
 				},
 				function() {
 					user.displayView("countdown");
 					$("#countdown-div").text("3");
+					airconsole.vibrate(1000);
 				},
 				function() {
 					$("#countdown-div").text("2");
