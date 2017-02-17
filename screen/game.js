@@ -30,13 +30,10 @@ function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.stage.disableVisibilityChange = true;
 
+	game.add.image(0, 0, 'background');
+
 	fixedBlocks = game.add.group();
 	fixedBlocks.enableBody = true;
-
-	platforms = game.add.group();
-	platforms.enableBody = true;
-
-	game.add.image(0, 0, 'background');
 
 	platforms = game.add.group();
 	platforms.enableBody = true;
@@ -67,7 +64,8 @@ function create() {
 			trump.user = users[u];
 			trump.user.onAction = function(action) {
 				if (action == 'drop' && trump.hasBlock) {
-					trump.block.setAll('velocity.y', 200);
+					trump.block.setAll('body.velocity.y', 200);
+					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
 				}
 			};
@@ -80,6 +78,7 @@ function create() {
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
 				player.body.velocity.y = -450;
+				//game.sound.add('si-senor');
 			}
 
 			else if (action == 'switch') {
@@ -120,18 +119,25 @@ function updateTrump () {
 }
 
 function updateBlock () {
+	
 	game.physics.arcade.collide(trump.block, platforms, landed);
+	
 	game.physics.arcade.collide(trump.block, players, playerHit);
-
+	/*
+	if(fixedBlocks.length>0){
+		for(g in fixedBlocks){
+			game.physics.arcade.collide(trump.block, fixedBlocks[g], landed);
+		}
+	}
+	*/
 	if(trump.hasBlock){
 		trump.block.x = trump.body.x;
 	}
-
-
 }
+
 function landed(){
 	//console.log("start landed");
-	trump.block.setAll('body.immovable', true);
+	trump.block.setAll('body.velocity.y', 0);
 	fixedBlocks.add(trump.block);
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
