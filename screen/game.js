@@ -12,32 +12,36 @@ function game_init() {
 }
 
 function preload() {
+
 	game.load.image('background', 'assets/background.png');
 	game.load.image('ground', 'assets/ground.png');
 	game.load.image('wall', 'assets/wall.png');
 	game.load.image('block', 'assets/block.png');
 	game.load.image('mexican', 'assets/mexican.png');
 	game.load.image('trump', 'assets/trump.png');
+
+	console.log(game.load);
+	game.load.audio('si-senor', 'sounds/si-senor.ogg');
 }
 
 function create() {
 
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 	game.stage.disableVisibilityChange = true;
-	platforms = game.add.group();
-	platforms.enableBody = true;
 
 	game.add.image(0, 0, 'background');
 
+	platforms = game.add.group();
+	platforms.enableBody = true;
 	var ground = platforms.create(0, game.world.height 
 		- game.cache.getImage('ground').height, 'ground');
 	ground.body.immovable = true;
 
-
 	walls = game.add.group();
 	walls.enableBody = true;
 	var wallLeft = walls.create(0, 0, 'wall');
-	var wallRight = walls.create(game.world.width - 32, 0, 'wall');
+	var wallRight = walls.create(game.world.width
+		- game.cache.getImage('wall').width, 0, 'wall');
 	walls.setAll('body.immovable', true);
 
 	trump = game.add.sprite(80, 0, 'trump');
