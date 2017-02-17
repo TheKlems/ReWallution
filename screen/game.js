@@ -9,6 +9,7 @@ function game_init() {
 	game = new Phaser.Game(880, 880, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
+	game.stage.disableVisibilityChange = true;
 
 	$('.container-game').show();
 }
@@ -42,8 +43,8 @@ function create() {
 
 	trump = game.add.sprite(80, 0, 'trump');
 	game.physics.arcade.enable(trump);
-	trump.velocity = {x: 250, y: 0};
-	trump.body.velocity.x = trump.velocity.x;
+	trump.body.velocity.x = 250;
+	trump.body.bounce.x = 1;
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
 	trump.hasBlock = true;
@@ -62,6 +63,7 @@ function create() {
 		player.jump = function () {
 			player.body.velocity.y = -250;
 		}
+
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump') {
@@ -71,8 +73,8 @@ function create() {
 		game.physics.arcade.enable(player);
 		player.body.gravity.y = 600;
 		player.body.collideWorldBounds = true;	
-		player.velocity = {x: 150, y: 0};
-		player.body.velocity.x = player.velocity.x;
+		player.body.velocity.x = 150;
+		player.body.bounce.x = 1;
 		players.push(player);
 		console.log(player);
 	}
@@ -89,10 +91,10 @@ function updatePlayers () {
 		var player = players[p];
 		game.physics.arcade.collide(player, platforms);
 
-		if (game.physics.arcade.collide(player, walls)) {
+		/*if (game.physics.arcade.collide(player, walls)) {
 			player.velocity.x *= -1;
 			player.body.velocity.x = player.velocity.x;
-		}
+		}*/
 	}
 }
 
