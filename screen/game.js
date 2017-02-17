@@ -121,6 +121,7 @@ function updateTrump () {
 function updateBlock () {
 	
 	game.physics.arcade.collide(trump.block, platforms, landed);
+
 	
 	game.physics.arcade.collide(trump.block, players, playerHit);
 	
@@ -136,7 +137,7 @@ function updateBlock () {
 }
 
 function landed(){
-	//console.log("start landed");
+	console.log("collision sol ou autre bloc");
 	trump.block.setAll('body.velocity.y', 0);
 	fixedBlocks.add(trump.block);
 	trump.block = game.add.group();
@@ -159,6 +160,8 @@ function getRandomBlock(group) {
 		var nOfBlocks = Math.floor((Math.random()*4)+1);
 		var version3 = Math.floor((Math.random()*2)+1);
 		var version4 = Math.floor((Math.random()*7)+1);
+
+		console.log(nOfBlocks + " " + version3 + " " + version4);
 
 		for (var i = 0; i<nOfBlocks*80; i+=80){
 			group.create((i-nOfBlocks/2)*80, 60, 'block');
@@ -209,6 +212,10 @@ function getRandomBlock(group) {
 				default:
 					break;
 			}
+		}
+
+		for(var j = 0 ; j < nOfBlocks ; ++j){
+			group.xy(j, group.getChildAt(j).x + trump.body.x, group.getChildAt(j).y + trump.body.y);
 		}
 		
 		group.setAll('enableBody', true);
