@@ -6,6 +6,10 @@ var game,
 	platforms,
 	fixedBlocks;
 
+var flag = false;
+
+var TOP_Y = 100;
+
 function game_init() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
@@ -119,6 +123,7 @@ function updateTrump () {
 }
 
 function updateBlock () {
+	flag = false;
 	
 	game.physics.arcade.collide(trump.block, platforms, landed);
 
@@ -137,13 +142,18 @@ function updateBlock () {
 }
 
 function landed(){
-	console.log("collision sol ou autre bloc");
-	trump.block.setAll('body.velocity.y', 0);
-	fixedBlocks.add(trump.block);
-	trump.block = game.add.group();
-	getRandomBlock(trump.block);
-	trump.hasBlock = true;
-	//console.log("end landed");
+	if (!flag) {
+		console.log("collision sol ou autre bloc");
+		trump.block.setAll('body.velocity.y', 0);
+		fixedBlocks.add(trump.block);
+		trump.block = game.add.group();
+		getRandomBlock(trump.block);
+		trump.hasBlock = true;
+		//console.log("end landed");
+
+		flag = true;
+	}
+	
 }
 
 function playerHit(){
@@ -157,57 +167,76 @@ function playerHit(){
 function getRandomBlock(group) {
 		var bSize = 80;
 
-		var nOfBlocks = Math.floor((Math.random()*4)+1);
-		var version3 = Math.floor((Math.random()*2)+1);
-		var version4 = Math.floor((Math.random()*7)+1);
+		var nOfBlocks = Math.floor((Math.random()*4)+1); // 1 - 4 number of blocks
+		var version3 = Math.floor((Math.random()*2)+1); // 1 - 2 type of group with 3 blocks
+		var version4 = Math.floor((Math.random()*7)+1); // 1 - 7 type of group with 3 blocks
 
-		console.log(nOfBlocks + " " + version3 + " " + version4);
+		console.log("nblocks : ", nOfBlocks);
+		console.log("v3 : ", version3);
+		console.log("v4 : ", version4);
+		console.log((new Date).getTime());
 
-		for (var i = 0; i<nOfBlocks*80; i+=80){
-			group.create((i-nOfBlocks/2)*80, 60, 'block');
+		// creates sprite for each block
+		for (var i = 0; i<nOfBlocks; i++){
+			group.create((nOfBlocks-i)*80, TOP_Y, 'block'); //
 		}
+
+		// piece of 3 blocks - 
 		if(nOfBlocks == 3 && version3 == 2){
-			group.xy(0,-80,60);
-			group.xy(1,0,60);
-			group.xy(2,0,140);
+			group.xy(0,-80, TOP_Y);
+			group.xy(1,0, TOP_Y);
+			group.xy(2,0,TOP_Y+80);
 		}
+
 		if(nOfBlocks==4){
 			switch(version4){
 				case 1:
-					group.xy(0,-120,60);
-					group.xy(1,-40,60);
-					group.xy(2,40,60);
-					group.xy(3,-40,140);
+					// ###
+					//  #
+					group.xy(0,-120,TOP_Y);
+					group.xy(1,-40,TOP_Y);
+					group.xy(2,40,TOP_Y);
+					group.xy(3,-40,TOP_Y+80);
 					break;
 				case 2:
-					group.xy(0,-120,60);
-					group.xy(1,-40,60);
-					group.xy(2,40,60);
-					group.xy(3,-120,140);
+					// ###
+					// #
+					group.xy(0,-120,TOP_Y);
+					group.xy(1,-40,TOP_Y);
+					group.xy(2,40,TOP_Y);
+					group.xy(3,-120,TOP_Y+80);
 					break;
 				case 3:
-					group.xy(0,-120,60);
-					group.xy(1,-40,60);
-					group.xy(2,40,60);
-					group.xy(3,40,140);
+					// ###
+					//   #
+					group.xy(0,-120,TOP_Y);
+					group.xy(1,-40,TOP_Y);
+					group.xy(2,40,TOP_Y);
+					group.xy(3,40,TOP_Y+80);
 					break;
 				case 4:
-					group.xy(0,-120,60);
-					group.xy(1,-40,60);
-					group.xy(2,-40,140);
-					group.xy(3,40,140);
+					// ##
+					//  ##
+					group.xy(0,-120,TOP_Y);
+					group.xy(1,-40,TOP_Y);
+					group.xy(2,-40,TOP_Y+80);
+					group.xy(3,40,TOP_Y+80);
 					break;
 				case 5:
-					group.xy(0,-120,140);
-					group.xy(1,-40,140);
-					group.xy(2,-40,60);
-					group.xy(3,40,60);
+					//  ##
+					// ##
+					group.xy(0,-120,TOP_Y+80);
+					group.xy(1,-40,TOP_Y+80);
+					group.xy(2,-40,TOP_Y);
+					group.xy(3,40,TOP_Y);
 					break;
 				case 6:
-					group.xy(0,-80,60);
-					group.xy(1,0,60);
-					group.xy(2,-80,140);
-					group.xy(3,0,140);
+					// ##
+					// ##
+					group.xy(0,-80,TOP_Y);
+					group.xy(1,0,TOP_Y);
+					group.xy(2,-80,TOP_Y+80);
+					group.xy(3,0,TOP_Y+80);
 					break;
 				default:
 					break;
