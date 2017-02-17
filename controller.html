@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="css/controller.css">
 		<script type="text/javascript" src="libs/jquery.js"></script>
 		<script type="text/javascript" src="libs/airconsole.js"></script>
@@ -12,18 +13,30 @@
 	</head>
 	<body>
 		<div class="container container-menu">
-			<div>
-				Players waiting
-			</div>
-			<button id="launch-game" type="button">Launch game</button>
+			<div class="ui-element">Players waiting...</div>
+			<button id="launch-game" type="button"><span class="glyphicon glyphicon-play"></span></button>
+		</div>
+		<div class="container container-info">
+			<div>You are ...</div>
+		</div>
+		<div class="container container-info-trump">
+			<div>Donald Trump !!</div>
+			<img src="">
+		</div>
+		<div class="container container-info-mexican">
+			<div>A mexican !</div>
+			<img src="">
+		</div>
+		<div class="container container-countdown">
+			<div></div>
 		</div>
 		<div class="container container-trump">
-			<button id="drop">Drop</button>
-			<button id="rotate">Rotate</button>
+			<button id="drop"><span class="glyphicon glyphicon-arrow-down"></span></button>
+			<button id="rotate"><span class="glyphicon glyphicon-arrow-left"><span class="glyphicon glyphicon-arrow-right"></button>
 		</div>
 		<div class="container container-mexican">
-			<button id="jump">Jump</button>
-			<button id="switch">Switch</button>
+			<button id="jump"><span class="glyphicon glyphicon-arrow-up"></span></button>
+			<button id="rotate"><span class="glyphicon glyphicon-arrow-left"><span class="glyphicon glyphicon-arrow-right"></button>
 		</div>
 	</body>
 </html>
