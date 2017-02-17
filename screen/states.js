@@ -1,8 +1,10 @@
+var users;
+
 var states = {
 	menuStart: function () {
 		$(".container-menu").show();
 
-		var users = [];
+		users = [];
 
 		airconsole.onConnect = function(id) {
 			users[id] = new User(id);

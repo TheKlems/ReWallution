@@ -38,28 +38,33 @@ function create() {
 	var wallRight = walls.create(game.world.width - 32, 0, 'wall');
 	walls.setAll('body.immovable', true);
 
-	players = [];
-	players.push(game.add.sprite(32, game.world.height - 350,
-		'mexican'));
-	players.push(game.add.sprite(380, game.world.height - 350,
-		'mexican'));
-
-	for (var p in players) {
-		var player = players[p];
-		game.physics.arcade.enable(player);
-		player.body.gravity.y = 600;
-		player.body.collideWorldBounds = true;	
-		player.velocity = {x: 150, y: 0};
-		player.body.velocity.x = player.velocity.x;
-		console.log(player);
-	}
-
 	trump = game.add.sprite(80, 0, 'trump');
 	game.physics.arcade.enable(trump);
 	trump.velocity = {x: 250, y: 0};
 	trump.body.velocity.x = trump.velocity.x;
 	trump.block = game.add.group();
 	getRandomBlock(trump.block);
+	trump.hasBlock = true;
+	console.log(trump.block);
+
+	players = [];
+
+	for (var u in users) {
+
+		if (users[u].isTrump) {
+			continue;
+		}
+
+		var player = game.add.sprite(32 + u * 160, game.world.height - 350, 'mexican');
+		player.user = users[u];
+		game.physics.arcade.enable(player);
+		player.body.gravity.y = 600;
+		player.body.collideWorldBounds = true;	
+		player.velocity = {x: 150, y: 0};
+		player.body.velocity.x = player.velocity.x;
+		players.push(player);
+		console.log(player);
+	}
 }
 
 function update() {
@@ -71,6 +76,7 @@ function update() {
 function updatePlayers () {
 	for (var p in players) {
 		var player = players[p];
+		game.physics.arcade.collide(player, platforms);
 
 		if (game.input.keyboard.createCursorKeys().up.isDown
 			&& player.body.touching.down) {
@@ -90,12 +96,21 @@ function updateTrump () {
 		trump.velocity.x *= -1;
 		trump.body.velocity.x = trump.velocity.x;
 	}
+	if (game.input.keyboard.createCursorKeys().down.isDown
+		&& trump.hasBlock) {
+		console.log("down");
+		trump.block.setAll('velocity.y', 200);
+		trump.hasBlock = false;
+	}
 }
 
 function updateBlock () {
 	
-	//console.log(trump);
-	trump.block.x = trump.body.x;
+	if(trump.hasBlock){
+		trump.block.x = trump.body.x;
+	}else{
+		trump.block.y = trump.block.y+10;
+	}
 }
 
 function getRandomBlock(group) {
