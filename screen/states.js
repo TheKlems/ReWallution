@@ -2,7 +2,13 @@ var users;
 
 var states = {
 	menuStart: function () {
-		$(".container-menu").show();
+		// Renders view in argument
+		function displayView(view) {
+			$(".container").hide();
+			$(".container-"+view).show();
+		}
+		
+		displayView("menu");
 
 		users = {};
 
@@ -18,6 +24,9 @@ var states = {
 			console.log(json);
 			users[id].updateData(json);
 		};
+
+		$("#button-help").click(function(){ displayView("help") });
+		$("#button-help-back").click(function() { displayView("menu") } );
 
 		function User(id) {
 			this.id = id;
@@ -57,8 +66,7 @@ var states = {
 				}
 
 				window.setTimeout(function() {
-					$('.container').hide();
-					$('.container-game').show();
+					displayView("game");
 					states.game();
 				}, 5000);
 			}
