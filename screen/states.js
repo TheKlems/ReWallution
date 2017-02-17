@@ -5,13 +5,7 @@ var states = {
 	startTransition: function () {
 		console.log("Menu");
 	},
-	game: function () {
-
-		player = new Player(10, 10);
-
-		Engine.run(engine);
-		Render.run(render);
-	},
+	game: function () {game_init()},
 	mexicanWins: function () {
 		console.log("Menu");
 	},
