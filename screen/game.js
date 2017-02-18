@@ -65,9 +65,6 @@ function create() {
 
 	game.add.image(0, 0, 'background');
 
-	fixedBlocks = game.add.group();
-	fixedBlocks.enableBody = true;
-
 	platforms = game.add.group();
 	platforms.enableBody = true;
 	var ground = platforms.create(0, game.world.height 
@@ -80,6 +77,10 @@ function create() {
 	var wallRight = walls.create(game.world.width
 		- game.cache.getImage('wall').width, 0, 'wall');
 	walls.setAll('body.immovable', true);
+
+	// Fixed blocks after walls 
+	fixedBlocks = game.add.group();
+	fixedBlocks.enableBody = true;
 
 	trump = game.add.sprite(80, 0, 'trump');
 	game.physics.arcade.enable(trump);
