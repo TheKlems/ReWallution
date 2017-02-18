@@ -98,18 +98,15 @@ function create() {
 	items.keys = ITEM_KEYS;
 	items.timer = game.time.add(new Phaser.Timer(game));
 	items.timer.loop(5 * Phaser.Timer.SECOND, function () {
-		console.log("loop");
-		console.log("all items:", items.children);
 		if (items.children.length < 3 && Math.random() < 0.66) {
 			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
-			console.log("lucky");
-			item = items.create(Math.random() * game.world.width,
-				Math.random() * game.world.height, key);
+			var item = items.create(Math.random() * game.world.width,
+				//Math.random() * game.world.height, key);
+				game.world.height - 200, key);
+			item.enableBody = true;
 			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
 				function () {
-					console.log("autodestr: ", item);
 					items.remove(item, true);
-					console.log("after:",item, items.children);
 			}, this);
 		} 
 	}, this);
@@ -231,7 +228,14 @@ function updatePlayers () {
 }
 
 function updateItems () {
-	game.physics.arcade.overlap(players, items, powerup);
+	console.log(game.physics.arcade.overlap(players, items, powerup));
+	var j = false;
+	for (i in items) {
+		j = j | game.physics.arcade.overlap(players, items.children[i]);
+	}
+	if (j) {
+		console.log("overlaped");
+	}
 }
 
 function updateTrump () {
@@ -396,8 +400,7 @@ function powerdown (player, item) {
 			break;
 	}
 
-	items.remove(item);
-	item.destroy();
+	items.remove(item, true);
 }
 
 function render() {
