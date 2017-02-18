@@ -115,20 +115,21 @@ var states = {
 	},
 	game: function () {gameInit()},
 
-	mexicanWins: function (user) {
-		console.log(user, "mexican wins");
+	mexicanWins: function () {
 		trump.user.clientAction("lose");
 
 		for (p in players) {
-			players[p].user.score += 1;
-			players[p].user.clientAction("win");
+			if (players[p].alive) {
+				players[p].user.score += 3;
+				players[p].user.clientAction("win");
+			}
 		}
 
 		states.menuGameOver();
 	},
 	trumpWins: function () {
 		console.log(trump.user, "trump wins");
-		trump.user.score += 3;	
+		trump.user.score += 1;
 		trump.user.clientAction("win-trump");
 
 		for (p in players) {
