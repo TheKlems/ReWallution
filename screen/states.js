@@ -67,7 +67,7 @@ var states = {
 			console.log(action);
 
 			// user launching the game is trump
-			if (action == "start-game") {
+			if (action == "start-game" && !playing) {
 				
 				var i = 0;
 				console.log(Object.keys(users).length);
@@ -88,9 +88,10 @@ var states = {
 					users[id].clientAction(actionToSend);
 				}
 
+				playing = true;
+
 				window.setTimeout(function() {
 					displayView("game");
-					playing = true;
 					states.game();
 				}, 5000);
 			}
