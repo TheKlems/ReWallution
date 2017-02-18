@@ -92,3 +92,7 @@ body {
 img {
 	height: 60vh;
 }
+
+.container-trump img {
+	height: 40%;
+}
