@@ -69,6 +69,14 @@ var states = {
 			else if (action == "dead") {
 				this.displayView("dead");
 			}
+
+			else if (action == "busy") {
+				this.displayView("busy");
+			}
+
+			else if (action == "ready") {
+				this.displayView("menu");
+			}
 		};
 
 		User.prototype.sendAction = function(action) {
