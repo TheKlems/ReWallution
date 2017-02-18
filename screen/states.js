@@ -32,6 +32,7 @@ var states = {
 			this.id = id;
 			this.username = airconsole.getNickname(id);
 			this.picture = airconsole.getProfilePicture(id);
+			this.score = 0;
 			this.isTrump = false;
 
 			this.displayWaiting();
@@ -88,15 +89,26 @@ var states = {
 	startTransition: function () {
 		console.log("Menu");
 	},
-	game: function () {game_init()},
-	mexicanWins: function () {
-		console.log("Menu");
+	game: function () {gameInit()},
+	mexicanWins: function (user) {
+		console.log(user, "mexican wins");
+		user.isTrump = true;
+		trump.user.isTrump = false;
+
+		for (p in players) {
+			players[p].user.score += 1;
+		}
+
+		states.menuGameOver();
 	},
 	trumpWins: function () {
-		console.log("Menu");
+		console.log(trump.user, "trump wins");
+		trump.user.score += 3;	
+
+		states.menuGameOver();
 	},
 	menuGameOver: function () {
-		console.log("Menu");
+		game.destroy();
 	},
 	swapTrump: function () {
 		console.log("Menu");
