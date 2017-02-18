@@ -66,6 +66,13 @@ body {
 	font-size: 15vh;
 }
 
+.ui-middle {
+	margin-top: 20vh;
+	font-family: 'Luckiest Guy';
+	text-align: center;
+	font-size: 9vh;
+}
+
 .ui-font-m {
 	font-family: 'Luckiest Guy';
 	text-align: center;
@@ -76,6 +83,10 @@ body {
 
 .ui-top {
 	margin-top: 10vh;
+}
+
+.ui-top-lower {
+	margin-top: 15vh;
 }
 
 img {
