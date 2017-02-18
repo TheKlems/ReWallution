@@ -6,9 +6,9 @@ var game,
 	platforms,
 	fixedBlocks;
 
-var blockCollisionFlag = false;
+var BLOCK_LENGTH = 80;
 
-var TOP_Y = 100;
+var blockCollisionFlag = false;
 
 function gameInit() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
@@ -98,6 +98,7 @@ function create() {
 			trump.user = users[u];
 			trump.user.onAction = function(action) {
 				if (action == 'drop' && trump.hasBlock) {
+					var isOver = false;
 					trump.block.enableBody = true;
 					trump.block.setAll('enableBody', true);
 					game.physics.arcade.enable(trump.block);
@@ -107,7 +108,7 @@ function create() {
 					trump.hasBlock = false;
 					game.sound.play(game.sound.trump());
 					game.sound.play('brick-drop', 0.7);
-				}
+				}else if(action == 'drop' && trump.hasBlock)
 			};
 
 			continue;
@@ -189,7 +190,8 @@ function updateBlock () {
 	
 
 	if(trump.hasBlock){
-		trump.block.x = trump.body.x;
+		trump.block.x = trump.body.x+trump.body.width/2-trump.block.width/2;
+		trump.block.y = 100;
 	}
 }
 
@@ -218,11 +220,11 @@ function playerHit(){
 }
 
 function getRandomBlock(group) {
-		var bSize = 80;
+		var s = BLOCK_LENGTH;
 
 		var nOfBlocks = Math.floor((Math.random()*4)+1); // 1 - 4 number of blocks
 		var version3 = Math.floor((Math.random()*2)+1); // 1 - 2 type of group with 3 blocks
-		var version4 = Math.floor((Math.random()*7)+1); // 1 - 7 type of group with 3 blocks
+		var version4 = Math.floor((Math.random()*7)+1); // 1 - 7 type of group with 4 blocks
 
 		console.log("nblocks : ", nOfBlocks);
 		console.log("v3 : ", version3);
@@ -231,14 +233,14 @@ function getRandomBlock(group) {
 
 		// creates sprite for each block
 		for (var i = 0; i<nOfBlocks; i++){
-			group.create((nOfBlocks-i)*80, TOP_Y, 'block'); //
+			group.create(i*s, 0, 'block'); //
 		}
 
 		// piece of 3 blocks - 
 		if(nOfBlocks == 3 && version3 == 2){
-			group.xy(0,-80, TOP_Y);
-			group.xy(1,0, TOP_Y);
-			group.xy(2,0,TOP_Y+80);
+			group.xy(0, 0, 0);
+			group.xy(1, s, 0);
+			group.xy(2, 0, s);
 		}
 
 		if(nOfBlocks==4){
@@ -246,60 +248,55 @@ function getRandomBlock(group) {
 				case 1:
 					// ###
 					//  #
-					group.xy(0,-120,TOP_Y);
-					group.xy(1,-40,TOP_Y);
-					group.xy(2,40,TOP_Y);
-					group.xy(3,-40,TOP_Y+80);
+					group.xy(0, 0, 0);
+					group.xy(1, s, 0);
+					group.xy(2, 2*s, 0);
+					group.xy(3, s, s);
 					break;
 				case 2:
 					// ###
 					// #
-					group.xy(0,-120,TOP_Y);
-					group.xy(1,-40,TOP_Y);
-					group.xy(2,40,TOP_Y);
-					group.xy(3,-120,TOP_Y+80);
+					group.xy(0, 0, 0);
+					group.xy(1, s, 0);
+					group.xy(2, 2*s, 0);
+					group.xy(3, 0, s);
 					break;
 				case 3:
 					// ###
 					//   #
-					group.xy(0,-120,TOP_Y);
-					group.xy(1,-40,TOP_Y);
-					group.xy(2,40,TOP_Y);
-					group.xy(3,40,TOP_Y+80);
+					group.xy(0, 0, 0);
+					group.xy(1, s, 0);
+					group.xy(2, 2*s, 0);
+					group.xy(3, 2*s, s);
 					break;
 				case 4:
 					// ##
 					//  ##
-					group.xy(0,-120,TOP_Y);
-					group.xy(1,-40,TOP_Y);
-					group.xy(2,-40,TOP_Y+80);
-					group.xy(3,40,TOP_Y+80);
+					group.xy(0, 0, 0);
+					group.xy(1, s, 0);
+					group.xy(2, s, s);
+					group.xy(3, 2*s, s);
 					break;
 				case 5:
 					//  ##
 					// ##
-					group.xy(0,-120,TOP_Y+80);
-					group.xy(1,-40,TOP_Y+80);
-					group.xy(2,-40,TOP_Y);
-					group.xy(3,40,TOP_Y);
+					group.xy(0, s, 0);
+					group.xy(1, 2*s, 0);
+					group.xy(2, 0, s);
+					group.xy(3, s, s);
 					break;
 				case 6:
 					// ##
 					// ##
-					group.xy(0,-80,TOP_Y);
-					group.xy(1,0,TOP_Y);
-					group.xy(2,-80,TOP_Y+80);
-					group.xy(3,0,TOP_Y+80);
+					group.xy(0,0,0);
+					group.xy(1,s,0);
+					group.xy(2,0,s);
+					group.xy(3,s,s);
 					break;
 				default:
 					break;
 			}
 		}
-
-		for(var j = 0 ; j < nOfBlocks ; ++j){
-			group.xy(j, group.getChildAt(j).x + trump.body.x, group.getChildAt(j).y + trump.body.y);
-		}
-		
 		group.setAll('enableBody', false);
 		group.enableBody = false;
 
