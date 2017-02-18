@@ -102,8 +102,9 @@ function create() {
 			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
 			var item = items.create(Math.random() * game.world.width,
 				//Math.random() * game.world.height, key);
-				game.world.height - 200, key);
+				game.world.height - 300, key);
 			item.enableBody = true;
+			game.physics.arcade.enable(item);
 			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
 				function () {
 					items.remove(item, true);
@@ -228,14 +229,24 @@ function updatePlayers () {
 }
 
 function updateItems () {
-	console.log(game.physics.arcade.overlap(players, items, powerup));
-	var j = false;
-	for (i in items) {
-		j = j | game.physics.arcade.overlap(players, items.children[i]);
+
+	for (p in players) for (i in items.children) {	
+
+		if (players[p].poweredUp == true) continue;
+
+		if (checkOverlap(players[p], items.children[i])) {
+			powerup(players[p], items.children[i]);
+		}
 	}
-	if (j) {
-		console.log("overlaped");
-	}
+}
+
+function checkOverlap(spriteA, spriteB) {
+
+    var boundsA = spriteA.getBounds();
+    var boundsB = spriteB.getBounds();
+
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
+
 }
 
 function updateTrump () {
@@ -363,44 +374,49 @@ function getRandomBlock(group) {
 }
 
 function powerup (player, item) {
-	console.log("powerup: ", player, item);
 	items.timer.remove(item.destroyEvent);
+	item.visibility = false;
+	player.poweredUp = true;
+	console.log("uped");
 
 	switch (item.key) {
 		case 'hamburger':
-			player.velocity.x /= 2;
+			player.body.velocity.x /= 2;
+			player.body.gravity.y *= 2;
 			break;
 
 		case 'chili':
-			player.velocity.x *= 2;
+			player.body.velocity.x *= 4;
 			break;
 
 		case 'tacos':
-			player.gravity.y /= 2;
+			player.body.bounce.y = 1;
 			break;
 	}
 
-	items.timer.add(5 * Phaser.Timer.SECOND, powerdown, this, player, item);
+	items.timer.add(4 * Phaser.Timer.SECOND, powerdown, this, player, item.key);
+	items.remove(item, true);
 }
 
-function powerdown (player, item) {
-	console.log("powerdown: ", player, item);
+function powerdown (player, key) {
+	player.poweredUp = false;
 
-	switch (item.key) {
+	switch (key) {
 		case 'hamburger':
-			player.velocity.x *= 2;
+			player.body.velocity.x *= 2;
+			player.body.gravity.y /= 2;
 			break;
 
 		case 'chili':
-			player.velocity.x /= 2;
+			player.body.velocity.x /= 4;
 			break;
 
 		case 'tacos':
-			player.gravity.y *= 2;
+			player.body.bounce.y = 0;
 			break;
 	}
 
-	items.remove(item, true);
+	console.log("downed");
 }
 
 function render() {
