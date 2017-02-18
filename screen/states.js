@@ -140,6 +140,7 @@ var states = {
 	},
 	menuGameOver: function () {
 		game.destroy();
+		window.clearInterval(interval);
 
 		playing = false;
 
