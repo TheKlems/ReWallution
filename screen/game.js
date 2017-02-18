@@ -10,7 +10,7 @@ var blockCollisionFlag = false;
 
 var TOP_Y = 100;
 
-function game_init() {
+function gameInit() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
 		'game', {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
@@ -116,6 +116,7 @@ function create() {
 		var player = game.add.sprite(32 + u * 160, game.world.height 
 			- game.cache.getImage('ground').height 
 			- game.cache.getImage('mexican').height, 'mexican');
+		player.alive = true;
 		player.user = users[u];
 		player.user.onAction = function(action) {
 			if (action == 'jump' && player.body.touching.down) {
@@ -149,11 +150,22 @@ function update() {
 }
 
 function updatePlayers () {
+	var alivePlayers = 0;
+
 	for (var p in players) {
 		var player = players[p];
 		game.physics.arcade.collide(player, platforms);
 		game.physics.arcade.collide(player, walls);
 		game.physics.arcade.collide(player, players);
+
+		if (player.body.y < trump.body.height) {
+			states.mexicanWins(player.user);
+		}
+		alivePlayers += player.alive;
+	}
+
+	if (alivePlayers == 0) {
+		states.trumpWins();
 	}
 }
 
@@ -200,6 +212,7 @@ function playerHit(){
 	for(p in players){
 		if(players[p].body.touching.up){
 			players[p].kill();
+			players[p].alive = false;	
 		}
 	}
 }
