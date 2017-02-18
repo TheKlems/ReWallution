@@ -148,9 +148,17 @@ function create() {
 					for (b in trump.block.children) {
 						// It just works.
 						var block = trump.block.children[b];
-						var tmp = block.x;
-						block.x = block.y;
-						block.y = -tmp;
+						var tmpX, tmpY, tmp;
+						tmpX = block.x+0.5*BLOCK_LENGTH;
+						tmpY = block.y+0.5*BLOCK_LENGTH;
+
+						tmp = tmpX;
+						tmpX = tmpY;
+						tmpY = -tmp;
+
+						block.x = tmpX-0.5*BLOCK_LENGTH;
+						block.y = tmpY-0.5*BLOCK_LENGTH;
+
 					}
 				}
 			});
@@ -247,8 +255,8 @@ function updateBlock () {
 	
 
 	if(trump.hasBlock){
-		trump.block.x = trump.body.x+trump.body.width/2-trump.block.width/2;
-		trump.block.y = 100;
+		trump.block.x = trump.body.x+trump.body.width/2;
+		trump.block.y = 150;
 	}
 }
 
@@ -281,14 +289,14 @@ function getRandomBlock(group) {
 
 		// creates sprite for each block
 		for (var i = 0; i<nOfBlocks; i++){
-			group.create(i*s, 0, 'block'); //
+			group.create((i-nOfBlocks/2)*s, -0.5*s, 'block'); //
 		}
 
 		// piece of 3 blocks - 
 		if(nOfBlocks == 3 && version3 == 2){
-			group.xy(0, 0, 0);
-			group.xy(1, s, 0);
-			group.xy(2, 0, s);
+			group.xy(0, -s, -s);
+			group.xy(1, 0, -s);
+			group.xy(2, -s, 0);
 		}
 
 		if(nOfBlocks==4){
@@ -296,50 +304,49 @@ function getRandomBlock(group) {
 				case 1:
 					// ###
 					//  #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, s, s);
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, -0.5*s, 0.5*s);
 					break;
 				case 2:
 					// ###
 					// #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, 0, s);
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, -1.5*s, 0.5*s);
 					break;
 				case 3:
 					// ###
 					//   #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, 2*s, s);
-					break;
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, 0.5*s, 0.5*s);
 				case 4:
 					// ##
 					//  ##
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, s, s);
-					group.xy(3, 2*s, s);
+					group.xy(0, -1.5*s, -1*s);
+					group.xy(1, -0.5*s, -1*s);
+					group.xy(2, -0.5*s, 0);
+					group.xy(3, 0.5*s, 0);
 					break;
 				case 5:
 					//  ##
 					// ##
-					group.xy(0, s, 0);
-					group.xy(1, 2*s, 0);
-					group.xy(2, 0, s);
-					group.xy(3, s, s);
+					group.xy(0, -0.5*s, -1*s);
+					group.xy(1, 0.5*s, -1*s);
+					group.xy(2, -1.5*s, 0);
+					group.xy(3, -0.5*s, 0);
 					break;
 				case 6:
 					// ##
 					// ##
-					group.xy(0,0,0);
-					group.xy(1,s,0);
-					group.xy(2,0,s);
-					group.xy(3,s,s);
+					group.xy(0, -1*s, -1*s);
+					group.xy(1, -1*s, 0);
+					group.xy(2, 0, -1*s);
+					group.xy(3, 0, 0);
 					break;
 				default:
 					break;
