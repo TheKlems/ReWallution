@@ -22,11 +22,12 @@ function game_init() {
 
 function preload() {
 
-	var imageKeys = ['background', 'ground', 'wall', 'block', 'mexican', 'trump'];
+	var imageKeys = ['background', 'ground', 'wall', 'mexican', 'trump'];
 	for (k in imageKeys) {
 		var key = imageKeys[k];
 		game.load.image(key, 'assets/' + key + '.png');
 	}
+	game.load.image("block", "assets/block_" + BLOCK_LENGTH + ".png");
 
 	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
 	for (k in mexicanSoundKeys) {
