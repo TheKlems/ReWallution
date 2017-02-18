@@ -123,6 +123,7 @@ function create() {
 	trump.body.velocity.x = 250;
 	trump.body.bounce.x = 1;
 	trump.block = game.add.group();
+	trump.block.enableBody = true;
 	trump.block.physicsBodyType = Phaser.Physics.ARCADE;
 	getRandomBlock(trump.block);
 	trump.hasBlock = true;
@@ -236,7 +237,7 @@ function updatePlayers () {
 }
 
 function updateItems () {
-	console.log(game.physics.arcade.overlap(players, items, powerup));
+	//console.log(game.physics.arcade.overlap(players, items, powerup));
 	var j = false;
 	for (i in items) {
 		j = j | game.physics.arcade.overlap(players, items.children[i]);
@@ -420,15 +421,23 @@ function checkOverlapOnDrop(){
 	trump.block.setAll('enableBody', true);
 	game.physics.arcade.enable(trump.block);
 
-	for(b in fixedBlocks.children){
-		overlaping = overlaping || game.physics.arcade.overlap(trump.block, fixedBlocks.children[b]);
+	for(c in fixedBlocks.children) for(b1 in fixedBlocks.children[c].children) for(b2 in trump.block.children){
+		overlaping = overlaping || checkOverlap(fixedBlocks.children[c].children[b1], trump.block.children[b2]);
 	}
-
-
+	console.log("Overlaping : ", overlaping);
 	trump.block.enableBody = false;
 	trump.block.setAll('enableBody', false);
 
 	return overlaping;
+
+}
+
+function checkOverlap(spriteA, spriteB) {
+
+    var boundsA = spriteA.getBounds();
+    var boundsB = spriteB.getBounds();
+
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
 
 }
 
