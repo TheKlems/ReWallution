@@ -6,7 +6,8 @@ var game,
 	platforms,
 	fixedBlocks;
 
-var BLOCK_LENGTH = 40;
+var BLOCK_LENGTH = 50;
+var MEXICAN_LENGTH = 45;
 
 var userToPlayer = {};
 
@@ -22,12 +23,13 @@ function gameInit() {
 
 function preload() {
 
-	var imageKeys = ['background', 'ground', 'wall', 'mexican', 'trump'];
+	var imageKeys = ['background', 'ground', 'wall', 'trump'];
 	for (k in imageKeys) {
 		var key = imageKeys[k];
 		game.load.image(key, 'assets/' + key + '.png');
 	}
 	game.load.image("block", "assets/block_" + BLOCK_LENGTH + ".png");
+	game.load.image("mexican", "assets/mexican_" + MEXICAN_LENGTH + ".png");
 
 	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
 	for (k in mexicanSoundKeys) {
@@ -109,7 +111,7 @@ function create() {
 					trump.block.setAll('enableBody', true);
 					game.physics.arcade.enable(trump.block);
 
-					trump.block.setAll('body.velocity.y', 200);
+					trump.block.setAll('body.velocity.y', 400);
 					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
 					game.sound.play(game.sound.trump());
@@ -134,7 +136,7 @@ function create() {
 
 			if (action == 'jump' && playerSafe.body.touching.down) {
 				console.log(playerSafe);
-				playerSafe.body.velocity.y = -450;
+				playerSafe.body.velocity.y = -650;
 				game.sound.play(game.sound.mexican());
 				game.sound.play('jump', 0.2);
 			}
@@ -161,9 +163,9 @@ function create() {
 }
 
 function update() {
-	updatePlayers();
-	updateTrump();
 	updateBlock();
+	updateTrump();
+	updatePlayers();
 }
 
 function updatePlayers () {
