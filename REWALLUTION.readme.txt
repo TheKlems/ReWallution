@@ -1,0 +1,28 @@
+Jeu : REWALLUTION
+
+Ce jeu a été développé par l'équipe "Very Bad Bois" lors de la Lvlup Gamejam 2017 à Fribourg.
+L'équipe est composée de :
+	Pasquier Vincent
+	Brodard Vincent
+	Maillard Benoît
+	Ruffray Benoît
+
+Mise en place :
+
+Pour jouer à Rewallution, il faut tout d'abord avoir un serveur, local ou distant, à disposition.
+L'ensemble des fichiers HTML et Javascript doivent être décompréssés/déGitHubés dans un dossier accessible depuis le serveur, afin de les afficher dans le navigateur.
+
+Ce jeu a été développé pour fonctionner avec AirConsole. AirConsole met à disposition un serveur qui interpretera les différents fichiers du jeu. Il suffit d'aller à l'adresse http://www.airconsole.com/#***, en remplaçant les *** par l'adresse URL du serveur où se trouve le jeu.
+Il est aussi conseillé de télécharger l'application AirConsole sur son smartphone, car il servira de manette de jeu. On peut aussi aller sur le site d'AirConsole via son smartphone pour en faire une manette.
+
+Une fois le serveur de jeu lancé, un code est donné, avec lequel les participants se connectent depuis leur smartphone.
+
+Dès qu'une personne s'y est connectée, le menu du jeu s'affiche.
+
+Pour lancer une partie, il suffit d'utiliser le bouton sur l'écran du smartphone/manette.
+
+Comment jouer :
+
+ Le fonctionnement du jeu est donné sur le menu du jeu, avant de lancer une partie.
+
+Amusez-vous bien !
