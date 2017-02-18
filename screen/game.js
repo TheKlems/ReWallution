@@ -6,7 +6,7 @@ var game,
 	platforms,
 	fixedBlocks;
 
-var BLOCK_LENGTH = 80;
+var BLOCK_LENGTH = 40;
 
 var userToPlayer = {};
 
@@ -112,6 +112,9 @@ function create() {
 					trump.hasBlock = false;
 					game.sound.play(game.sound.trump());
 					game.sound.play('brick-drop', 0.7);
+
+				}else if(action == 'rotate' && trump.hasBlock) {
+					//rotation
 				}
 			});
 
