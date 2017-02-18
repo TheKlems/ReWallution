@@ -98,6 +98,10 @@ function create() {
 			trump.user = users[u];
 			trump.user.onAction = function(action) {
 				if (action == 'drop' && trump.hasBlock) {
+					trump.block.enableBody = true;
+					trump.block.setAll('enableBody', true);
+					game.physics.arcade.enable(trump.block);
+
 					trump.block.setAll('body.velocity.y', 200);
 					trump.block.setAll('body.immovable', true);
 					trump.hasBlock = false;
@@ -178,7 +182,7 @@ function updateBlock () {
 }
 
 function landed(){
-	if (!blockCollisionFlag) {
+	if (!blockCollisionFlag && !trump.hasBlock) {
 		console.log("collision sol ou autre bloc");
 		trump.block.setAll('body.velocity.y', 0);
 		fixedBlocks.add(trump.block);
@@ -188,7 +192,6 @@ function landed(){
 		//console.log("end landed");
 		blockCollisionFlag = true;
 		game.sound.play('brick-landed', 0.2);
-		flag = true;
 	}
 	
 }
@@ -284,8 +287,8 @@ function getRandomBlock(group) {
 			group.xy(j, group.getChildAt(j).x + trump.body.x, group.getChildAt(j).y + trump.body.y);
 		}
 		
-		group.setAll('enableBody', true);
-		game.physics.arcade.enable(group);
+		group.setAll('enableBody', false);
+		group.enableBody = false;
 
 		return;
 }
