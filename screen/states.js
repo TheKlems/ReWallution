@@ -25,7 +25,7 @@ var states = {
 		};
 
 		airconsole.onMessage = function(id, json) {
-			console.log(json);
+			//console.log(json);
 			users[id].updateData(json);
 		};
 
@@ -64,19 +64,19 @@ var states = {
 		User.prototype.updateData = function(json) {
 			var action = JSON.parse(json).action;
 
-			console.log(action);
+			//console.log(action);
 
 			// user launching the game is trump
 			if (action == "start-game" && !playing) {
 				
 				var i = 0;
-				console.log(Object.keys(users).length);
+				//console.log(Object.keys(users).length);
 				var rand = Math.floor(Math.random() * (Object.keys(users).length-1));
-				console.log(rand);
+				//console.log(rand);
 
 				for (var id in users) {
-					console.log(firstGameFlag);
-					console.log(i, rand);
+					//console.log(firstGameFlag);
+					//console.log(i, rand);
 					users[id].isTrump = false;
 					if (i == rand) {
 						users[id].isTrump = true;
@@ -111,7 +111,7 @@ var states = {
 
 
 	startTransition: function () {
-		console.log("Menu");
+		//console.log("Menu");
 	},
 	game: function () {gameInit()},
 
@@ -128,7 +128,7 @@ var states = {
 		states.menuGameOver();
 	},
 	trumpWins: function () {
-		console.log(trump.user, "trump wins");
+		//console.log(trump.user, "trump wins");
 		trump.user.score += 1;
 		trump.user.clientAction("win-trump");
 
@@ -144,7 +144,7 @@ var states = {
 		playing = false;
 
 		for (var id in users) {
-			console.log("score ", users[id].score);
+			//console.log("score ", users[id].score);
 			users[id].div.children().children(".span-score").text(users[id].score);
 
 			window.setTimeout(function() {
@@ -155,7 +155,7 @@ var states = {
 		displayView("menu");
 	},
 	swapTrump: function () {
-		console.log("Menu");
+		//console.log("Menu");
 	},
 
 };

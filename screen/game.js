@@ -28,13 +28,14 @@ function gameInit() {
 
 function preload() {
 
-	timeout = 10;
-	window.setInterval(function () {
+	timeout = 60;
+	var interval = window.setInterval(function () {
 		timeout--;
 		$('#clock').text("Timeout: " + (timeout >= 10 ? "" : "0") + timeout);
 
 		if (timeout <= 0) {
 			states.mexicanWins();
+			window.clearInterval(interval);
 		}
 	}, 1000);
 
@@ -70,7 +71,7 @@ function preload() {
 		return trumpSoundKeys[Math.floor(Math.random() * trumpSoundKeys.length)];
 	};
 
-	var miscSoundKeys = ['jump', 'brick-landed', 'brick-drop'];
+	var miscSoundKeys = ['jump', 'brick-landed', 'brick-drop', 'powerup'];
 	for (k in miscSoundKeys) {
 		var key = miscSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -118,8 +119,8 @@ function create() {
 	items.timer.loop(5 * Phaser.Timer.SECOND, function () {
 		if (items.children.length < 3 && Math.random() < 0.66) {
 			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
-			var item = items.create(Math.random() * game.world.width,
-				Math.random() * game.world.height, key);
+			var item = items.create(Math.random() * (game.world.width - game.cache.getImage('wall').width * 2) + game.cache.getImage('wall').width,
+				Math.random() * (game.world.height - game.cache.getImage('trump').height - game.cache.getImage('ground').height) + game.cache.getImage('trump').height, key);
 			item.enableBody = true;
 			game.physics.arcade.enable(item);
 			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
@@ -194,10 +195,10 @@ function create() {
 			var playerSafe = players[userToPlayer[id]];
 
 			if (action == 'jump' && playerSafe.body.touching.down) {
-				console.log(playerSafe);
+				//console.log(playerSafe);
 				playerSafe.body.velocity.y = -650;
 				game.sound.play(game.sound.mexican());
-				game.sound.play('jump', 0.2);
+				game.sound.play('jump', 0.1);
 			}
 
 			else if (action == 'switch') {
@@ -239,6 +240,11 @@ function updatePlayers () {
 
 		if (player.body.y < trump.body.height) {
 			states.mexicanWins(player.user);
+		}
+
+		else if (player.body.y > game.world.height - game.cache.getImage('ground').height) {
+			player.user.clientAction("dead");
+			player.kill();
 		}
 		alivePlayers += player.alive;
 	}
@@ -396,7 +402,7 @@ function getRandomBlock(group) {
 function powerup (player, item) {
 	items.timer.remove(item.destroyEvent);
 	player.poweredUp = true;
-	console.log("uped");
+	game.sound.play('powerup', 0.6);
 
 	switch (item.key) {
 		case 'hamburger':
@@ -435,7 +441,7 @@ function powerdown (player, key) {
 			break;
 	}
 
-	console.log("downed");
+	//console.log("downed");
 }
 
 
@@ -449,7 +455,7 @@ function checkOverlapOnDrop(){
 	for(c in fixedBlocks.children) for(b1 in fixedBlocks.children[c].children) for(b2 in trump.block.children){
 		overlaping = overlaping || checkOverlap(fixedBlocks.children[c].children[b1], trump.block.children[b2]);
 	}
-	console.log("Overlaping : ", overlaping);
+	//console.log("Overlaping : ", overlaping);
 	trump.block.enableBody = false;
 	trump.block.setAll('enableBody', false);
 
