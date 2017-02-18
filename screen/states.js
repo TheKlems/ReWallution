@@ -1,5 +1,7 @@
 var users;
 var displayView;
+var firstGameFlag = true;
+var playing = false;
 
 var states = {
 	menuStart: function () {
@@ -19,6 +21,7 @@ var states = {
 
 		airconsole.onDisconnect = function(id) {
 			users[id].hideWaiting();
+			delete users[id];
 		};
 
 		airconsole.onMessage = function(id, json) {
@@ -37,6 +40,10 @@ var states = {
 			this.isTrump = false;
 
 			this.displayWaiting();
+
+			if (playing) {
+				this.clientAction("busy");
+			}
 		}
 
 		User.prototype.displayWaiting = function() {
@@ -45,9 +52,9 @@ var states = {
 			this.div = $(".user-div-generic").clone().removeClass("user-div-generic");
 			this.div.children(".user-name").text(this.username);
 			this.div.children(".user-picture").attr("src", this.picture);
-			this.div.children(".user-score").text(this.score);
+			this.div.children().children(".span-score").text(this.score);
 
-			this.div.appendTo(".container-menu");
+			this.div.appendTo("#menu-div");
 		};
 
 		User.prototype.hideWaiting = function() {
@@ -61,15 +68,29 @@ var states = {
 
 			// user launching the game is trump
 			if (action == "start-game") {
-				this.isTrump = true;
+				
+				var i = 0;
+				console.log(Object.keys(users).length);
+				var rand = Math.floor(Math.random() * (Object.keys(users).length-1));
+				console.log(rand);
 
 				for (var id in users) {
+					console.log(firstGameFlag);
+					console.log(i, rand);
+					users[id].isTrump = false;
+					if (i == rand) {
+						users[id].isTrump = true;
+					}
+
+					i++;
+
 					var actionToSend = (users[id].isTrump ? "start-trump" : "start-mexican");
 					users[id].clientAction(actionToSend);
 				}
 
 				window.setTimeout(function() {
 					displayView("game");
+					playing = true;
 					states.game();
 				}, 5000);
 			}
@@ -95,8 +116,6 @@ var states = {
 
 	mexicanWins: function (user) {
 		console.log(user, "mexican wins");
-		user.isTrump = true;
-		trump.user.isTrump = false;
 		trump.user.clientAction("lose");
 
 		for (p in players) {
@@ -120,9 +139,12 @@ var states = {
 	menuGameOver: function () {
 		game.destroy();
 
+		playing = false;
+
 		for (var id in users) {
 			console.log("score ", users[id].score);
-			users[id].div.children(".user-score").text(users[id].score);
+			users[id].div.children().children(".span-score").text(users[id].score);
+			users[id].clientAction("ready");
 		}
 
 		displayView("menu");

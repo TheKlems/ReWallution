@@ -6,22 +6,83 @@
 	display: none;
 }
 
+.ui-element {
+	width: 48%;
+	height: 98vh;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+	margin-height: 1vh;
+	float: left;
+	background-color: white;
+	color: black;
+	padding: 10px;
+	box-sizing: border-box;
+	border: 2px solid gray;
+	border-radius: 10px;
+	transition: background-color 0.1s;
+}
 
+h2 {
+	font-family: 'Luckiest Guy';
+	font-size: 3em;
+}
 
+.player-line {
+	width: 98%;
+	margin-left: 1%;
+	border: 2px solid gray;
+	border-radius: 10px;
+	font-family: 'Luckiest Guy';
+	margin-top: 1%;
+	overflow: auto;
 
+}
 
+.player-line > * {
+	float: left;
+	position: relative;
+}
 
+.user-picture {
+	width: 60px;
+	border-radius: 10px;
+	margin: 3px;
+}
 
+.user-name, .user-score {
+	position: absolute;
+	height: 30px;
+	font-size: 30px;
+	margin-top: 20px;
+}
 
+.user-name {
+	margin-left: 5%;
+}
 
+.user-score {
+	margin-left: 20%;
+}
 
+canvas {
+	margin: auto;
+}
 
-
-
+.how-to {
+	text-align: justify;
+	font-family: 'Luckiest Guy';
+	width: 90%;
+	margin-left: 5%;
+}
 
 
 
 
 body {
-	background-color: white;
+	background-color: black;
+}
+
+.font-normal {
+	font-family: Arial;
+	font-weight: 900;
 }
