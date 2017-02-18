@@ -7,6 +7,8 @@ var game,
 	platforms,
 	fixedBlocks;
 
+var timeout;
+
 var BLOCK_LENGTH = 50;
 var MEXICAN_LENGTH = 45;
 
@@ -20,11 +22,21 @@ var blockCollisionFlag = false;
 
 function gameInit() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
-		'game', {preload: this.preload, create: this.create,
+		$('#game'), {preload: this.preload, create: this.create,
 		update: this.update, render: this.render});
 }
 
 function preload() {
+
+	timeout = 10;
+	window.setInterval(function () {
+		timeout--;
+		$('#clock').text("Timeout: " + (timeout >= 10 ? "" : "0") + timeout);
+
+		if (timeout <= 0) {
+			states.mexicanWins();
+		}
+	}, 1000);
 
 	var imageKeys = ['background', 'ground', 'wall', 'trump'].concat(ITEM_KEYS);
 	for (k in imageKeys) {
