@@ -6,7 +6,7 @@ var game,
 	platforms,
 	fixedBlocks;
 
-var BLOCK_LENGTH = 80;
+var BLOCK_LENGTH = 40;
 
 var userToPlayer = {};
 
@@ -22,11 +22,12 @@ function gameInit() {
 
 function preload() {
 
-	var imageKeys = ['background', 'ground', 'wall', 'block', 'mexican', 'trump'];
+	var imageKeys = ['background', 'ground', 'wall', 'mexican', 'trump'];
 	for (k in imageKeys) {
 		var key = imageKeys[k];
 		game.load.image(key, 'assets/' + key + '.png');
 	}
+	game.load.image("block", "assets/block_" + BLOCK_LENGTH + ".png");
 
 	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
 	for (k in mexicanSoundKeys) {
@@ -113,6 +114,9 @@ function create() {
 					trump.hasBlock = false;
 					game.sound.play(game.sound.trump());
 					game.sound.play('brick-drop', 0.7);
+
+				}else if(action == 'rotate' && trump.hasBlock) {
+					//rotation
 				}
 			});
 
