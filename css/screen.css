@@ -86,3 +86,16 @@ body {
 	font-family: Arial;
 	font-weight: 900;
 }
+
+#clock {
+	font-family: 'Luckiest Guy';
+	background-color: white;
+	border: 2px solid gray;
+	border-radius: 10px;
+	width: 960px;
+	height: 40px;
+	font-size: 3em;
+	padding: 10px;
+	margin: auto;
+	margin-bottom: 10px;
+}
