@@ -144,7 +144,10 @@ var states = {
 		for (var id in users) {
 			console.log("score ", users[id].score);
 			users[id].div.children().children(".span-score").text(users[id].score);
-			users[id].clientAction("ready");
+
+			window.setTimeout(function() {
+				users[id].clientAction("ready");
+			}, 3000);
 		}
 
 		displayView("menu");
