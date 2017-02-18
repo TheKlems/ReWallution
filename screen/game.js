@@ -33,7 +33,7 @@ function preload() {
 	timeout = 60;
 	interval = window.setInterval(function () {
 		timeout--;
-		$('#clock').text("Timeout: " + (timeout >= 10 ? "" : "0") + timeout);
+		$('#clock').text("Mexicans win in : " + (timeout >= 10 ? "" : "0") + timeout);
 		console.log("hihihi", timeout);
 
 		if (timeout <= 0) {
