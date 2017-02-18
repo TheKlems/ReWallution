@@ -67,7 +67,7 @@ var states = {
 			console.log(action);
 
 			// user launching the game is trump
-			if (action == "start-game") {
+			if (action == "start-game" && !playing) {
 				
 				var i = 0;
 				console.log(Object.keys(users).length);
@@ -88,9 +88,10 @@ var states = {
 					users[id].clientAction(actionToSend);
 				}
 
+				playing = true;
+
 				window.setTimeout(function() {
 					displayView("game");
-					playing = true;
 					states.game();
 				}, 5000);
 			}
@@ -144,7 +145,10 @@ var states = {
 		for (var id in users) {
 			console.log("score ", users[id].score);
 			users[id].div.children().children(".span-score").text(users[id].score);
-			users[id].clientAction("ready");
+
+			window.setTimeout(function() {
+				users[id].clientAction("ready");
+			}, 3000);
 		}
 
 		displayView("menu");

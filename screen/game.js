@@ -10,7 +10,7 @@ var game,
 var BLOCK_LENGTH = 50;
 var MEXICAN_LENGTH = 45;
 
-var ITEM_KEYS = ['chili', 'tacos', 'burger'];
+var ITEM_KEYS = ['chili', 'tacos', 'hamburger'];
 
 var userToPlayer = {};
 
@@ -26,7 +26,7 @@ function gameInit() {
 
 function preload() {
 
-	var imageKeys = ['background', 'ground', 'wall', 'trump'];
+	var imageKeys = ['background', 'ground', 'wall', 'trump'].concat(ITEM_KEYS);
 	for (k in imageKeys) {
 		var key = imageKeys[k];
 		game.load.image(key, 'assets/' + key + '.png');
@@ -104,17 +104,15 @@ function create() {
 	items.keys = ITEM_KEYS;
 	items.timer = game.time.add(new Phaser.Timer(game));
 	items.timer.loop(5 * Phaser.Timer.SECOND, function () {
-		console.log("loop");
-		console.log(items);
 		if (items.children.length < 3 && Math.random() < 0.66) {
 			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
-			console.log("lucky");
-			item = items.create(Math.random() * game.world.width,
-				Math.random() * game.world.height, key);
+			var item = items.create(Math.random() * game.world.width,
+				//Math.random() * game.world.height, key);
+				game.world.height - 200, key);
+			item.enableBody = true;
 			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
 				function () {
-					items.remove(item);
-					item.destroy();
+					items.remove(item, true);
 			}, this);
 		} 
 	}, this);
@@ -238,9 +236,14 @@ function updatePlayers () {
 }
 
 function updateItems () {
-	for (p in players) {
-		game.physics.arcade.overlap(players[p], items, powerup);
-	}	
+	console.log(game.physics.arcade.overlap(players, items, powerup));
+	var j = false;
+	for (i in items) {
+		j = j | game.physics.arcade.overlap(players, items.children[i]);
+	}
+	if (j) {
+		console.log("overlaped");
+	}
 }
 
 function updateTrump () {
@@ -369,17 +372,44 @@ function getRandomBlock(group) {
 }
 
 function powerup (player, item) {
+	console.log("powerup: ", player, item);
 	items.timer.remove(item.destroyEvent);
 
-	switch (item.key) {}
+	switch (item.key) {
+		case 'hamburger':
+			player.velocity.x /= 2;
+			break;
+
+		case 'chili':
+			player.velocity.x *= 2;
+			break;
+
+		case 'tacos':
+			player.gravity.y /= 2;
+			break;
+	}
 
 	items.timer.add(5 * Phaser.Timer.SECOND, powerdown, this, player, item);
 }
 
 function powerdown (player, item) {
-	// item-key logic	
-	items.remove(item);
-	item.destroy();
+	console.log("powerdown: ", player, item);
+
+	switch (item.key) {
+		case 'hamburger':
+			player.velocity.x *= 2;
+			break;
+
+		case 'chili':
+			player.velocity.x /= 2;
+			break;
+
+		case 'tacos':
+			player.gravity.y *= 2;
+			break;
+	}
+
+	items.remove(item, true);
 }
 
 
