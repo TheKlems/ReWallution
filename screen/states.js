@@ -1,9 +1,10 @@
 var users;
+var displayView;
 
 var states = {
 	menuStart: function () {
 		// Renders view in argument
-		function displayView(view) {
+		displayView = function(view) {
 			$(".container").hide();
 			$(".container-"+view).show();
 		}
@@ -44,6 +45,7 @@ var states = {
 			this.div = $(".user-div-generic").clone().removeClass("user-div-generic");
 			this.div.children(".user-name").text(this.username);
 			this.div.children(".user-picture").attr("src", this.picture);
+			this.div.children(".user-score").text(this.score);
 
 			this.div.appendTo(".container-menu");
 		};
@@ -90,13 +92,16 @@ var states = {
 		console.log("Menu");
 	},
 	game: function () {gameInit()},
+
 	mexicanWins: function (user) {
 		console.log(user, "mexican wins");
 		user.isTrump = true;
 		trump.user.isTrump = false;
+		trump.user.clientAction("lose");
 
 		for (p in players) {
 			players[p].user.score += 1;
+			players[p].user.clientAction("win");
 		}
 
 		states.menuGameOver();
@@ -104,11 +109,23 @@ var states = {
 	trumpWins: function () {
 		console.log(trump.user, "trump wins");
 		trump.user.score += 3;	
+		trump.user.clientAction("win-trump");
+
+		for (p in players) {
+			players[p].user.clientAction("lose");
+		}
 
 		states.menuGameOver();
 	},
 	menuGameOver: function () {
 		game.destroy();
+
+		for (var id in users) {
+			console.log("score ", users[id].score);
+			users[id].div.children(".user-score").text(users[id].score);
+		}
+
+		displayView("menu");
 	},
 	swapTrump: function () {
 		console.log("Menu");

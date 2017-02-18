@@ -42,11 +42,32 @@ var states = {
 			else if (action == "start-mexican") {
 				this.transitionGame("mexican");
 			}
-			else if (action == "drope-false") {
+			else if (action == "win") {
+				this.displayView("win");
 
+				var thisCopy = this;
+				window.setTimeout(function() {
+					thisCopy.displayView("menu");
+				}, 3000);
 			}
-			else if (action == "drope-true") {
+			else if (action == "win-trump") {
+				this.displayView("win-trump");
 
+				var thisCopy = this;
+				window.setTimeout(function() {
+					thisCopy.displayView("menu");
+				}, 3000);
+			}
+			else if (action == "lose") {
+				this.displayView("lose");
+
+				var thisCopy = this;
+				window.setTimeout(function() {
+					thisCopy.displayView("menu");
+				}, 3000);
+			}
+			else if (action == "dead") {
+				this.displayView("dead");
 			}
 		};
 
@@ -68,11 +89,11 @@ var states = {
 			var actionsT = [
 				function() {
 					user.displayView("info-"+role);
+					airconsole.vibrate(1000);
 				},
 				function() {
 					user.displayView("countdown");
 					$("#countdown-div").text("3");
-					airconsole.vibrate(1000);
 				},
 				function() {
 					$("#countdown-div").text("2");

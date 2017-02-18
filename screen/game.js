@@ -232,7 +232,9 @@ function playerHit(){
 	for(p in players){
 		if(players[p].body.touching.up){
 			players[p].kill();
-			players[p].alive = false;	
+			players[p].alive = false;
+
+			players[p].user.clientAction("dead");
 		}
 	}
 }
