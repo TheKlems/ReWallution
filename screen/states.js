@@ -99,13 +99,13 @@ var states = {
 			players[p].user.score += 1;
 		}
 
-		menuGameOver();
+		states.menuGameOver();
 	},
 	trumpWins: function () {
 		console.log(trump.user, "trump wins");
 		trump.user.score += 3;	
 
-		menuGameOver();
+		states.menuGameOver();
 	},
 	menuGameOver: function () {
 		game.destroy();
