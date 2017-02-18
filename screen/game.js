@@ -118,7 +118,12 @@ function create() {
 					game.sound.play('brick-drop', 0.7);
 
 				}else if(action == 'rotate' && trump.hasBlock) {
-					//rotation
+					for (b in trump.block.children) {
+						var block = trump.block.children[b];
+						tmp = block.x;
+						block.x = block.y;
+						block.y = -tmp;
+					}
 				}
 			});
 
@@ -198,8 +203,9 @@ function updateBlock () {
 	
 	game.physics.arcade.collide(trump.block, platforms, landed);
 
-	
-	game.physics.arcade.collide(trump.block, players, playerHit);
+	for (p in players) {
+		game.physics.arcade.collide(trump.block, players[p], playerHit);
+	}
 	
 	if(fixedBlocks.length>0){
 		fixedBlocks.forEach(game.physics.arcade.collide, game.physics.arcade, this, trump.block, landed);
@@ -228,14 +234,10 @@ function landed(){
 	
 }
 
-function playerHit(){
-	for(p in players){
-		if(players[p].body.touching.up){
-			players[p].kill();
-			players[p].alive = false;
-
-			players[p].user.clientAction("dead");
-		}
+function playerHit(player){
+	if(player.body.touching.up){
+		player.user.clientAction("dead");
+		player.kill();
 	}
 }
 
