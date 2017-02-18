@@ -141,9 +141,9 @@ function create() {
 		});
 
 		game.physics.arcade.enable(player);
-		player.body.gravity.y = 600;
+		player.body.gravity.y = 900;
 		player.body.collideWorldBounds = true;	
-		player.body.velocity.x = 150;
+		player.body.velocity.x = 250;
 		player.body.bounce.x = 1;
 		players.push(player);
 
