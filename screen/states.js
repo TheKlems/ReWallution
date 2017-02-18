@@ -7,7 +7,7 @@ var states = {
 			$(".container").hide();
 			$(".container-"+view).show();
 		}
-		
+
 		displayView("menu");
 
 		users = {};
@@ -71,7 +71,7 @@ var states = {
 				}, 5000);
 			}
 			else {
-				this.onAction(action);
+				this.actionCallback(this.id, action);
 			}
 		};
 
@@ -79,7 +79,9 @@ var states = {
 			airconsole.message(this.id, JSON.stringify({"action" : action}));
 		};
 
-		User.prototype.onAction = function(actionString) {};
+		User.prototype.onAction = function(callback) {
+			this.actionCallback = callback;
+		};
 	},
 
 

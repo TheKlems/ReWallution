@@ -8,6 +8,8 @@ var game,
 
 var blockCollisionFlag = false;
 
+var userToPlayer = {};
+
 var TOP_Y = 100;
 
 function game_init() {
@@ -90,12 +92,13 @@ function create() {
 	trump.hasBlock = true;
 
 	players = [];
+	var iPlayer = 0;
 
 	for (var u in users) {
 
 		if (users[u].isTrump) {
 			trump.user = users[u];
-			trump.user.onAction = function(action) {
+			trump.user.onAction(function(id, action) {
 				if (action == 'drop' && trump.hasBlock) {
 					trump.block.enableBody = true;
 					trump.block.setAll('enableBody', true);
@@ -107,7 +110,7 @@ function create() {
 					game.sound.play(game.sound.trump());
 					game.sound.play('brick-drop', 0.7);
 				}
-			};
+			});
 
 			continue;
 		}
@@ -116,18 +119,21 @@ function create() {
 			- game.cache.getImage('ground').height 
 			- game.cache.getImage('mexican').height, 'mexican');
 		player.user = users[u];
-		player.user.onAction = function(action) {
-			if (action == 'jump' && player.body.touching.down) {
-				console.log(player);
-				player.body.velocity.y = -450;
+
+		player.user.onAction(function(id, action) {
+			var playerSafe = players[userToPlayer[id]];
+
+			if (action == 'jump' && playerSafe.body.touching.down) {
+				console.log(playerSafe);
+				playerSafe.body.velocity.y = -450;
 				game.sound.play(game.sound.mexican());
 				game.sound.play('jump', 0.2);
 			}
 
 			else if (action == 'switch') {
-				player.body.velocity.x *= -1;
+				playerSafe.body.velocity.x *= -1;
 			}
-		}
+		});
 
 		game.physics.arcade.enable(player);
 		player.body.gravity.y = 600;
@@ -135,6 +141,10 @@ function create() {
 		player.body.velocity.x = 150;
 		player.body.bounce.x = 1;
 		players.push(player);
+
+		userToPlayer[player.user.id] = iPlayer;
+
+		iPlayer++;
 	}
 
 	
