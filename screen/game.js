@@ -2,12 +2,15 @@ var game,
 	players,
 	trump,
 	blocks,
+	items,
 	walls,
 	platforms,
 	fixedBlocks;
 
 var BLOCK_LENGTH = 50;
 var MEXICAN_LENGTH = 45;
+
+var ITEM_KEYS = ['chili', 'tacos', 'burger'];
 
 var userToPlayer = {};
 
@@ -31,7 +34,8 @@ function preload() {
 	game.load.image("block", "assets/block_" + BLOCK_LENGTH + ".png");
 	game.load.image("mexican", "assets/mexican_" + MEXICAN_LENGTH + ".png");
 
-	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
+	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias',
+		'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
 	for (k in mexicanSoundKeys) {
 		var key = mexicanSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -42,7 +46,8 @@ function preload() {
 		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
 	};
 
-	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist', 'mexico-pay', 'really-rich'];
+	var trumpSoundKeys = ['build-a-wall', 'america-great-again',
+		'kill-terrorist', 'mexico-pay', 'really-rich'];
 	for (k in trumpSoundKeys) {
 		var key = trumpSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -89,6 +94,26 @@ function create() {
 	fixedBlocks = game.add.group();
 	fixedBlocks.enableBody = true;
 
+	items = game.add.group();
+	items.keys = ITEM_KEYS;
+	items.timer = game.time.add(new Phaser.Timer(game));
+	items.timer.loop(5 * Phaser.Timer.SECOND, function () {
+		console.log("loop");
+		console.log(items);
+		if (items.children.length < 3 && Math.random() < 0.66) {
+			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
+			console.log("lucky");
+			item = items.create(Math.random() * game.world.width,
+				Math.random() * game.world.height, key);
+			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
+				function () {
+					items.remove(item);
+					item.destroy();
+			}, this);
+		} 
+	}, this);
+	items.timer.start();
+
 	trump = game.add.sprite(80, 0, 'trump');
 	game.physics.arcade.enable(trump);
 	trump.body.velocity.x = 250;
@@ -100,6 +125,7 @@ function create() {
 	players = [];
 	var iPlayer = 0;
 
+	// Heyyyyyyy...
 	for (var u in users) {
 
 		if (users[u].isTrump) {
@@ -119,8 +145,9 @@ function create() {
 
 				}else if(action == 'rotate' && trump.hasBlock) {
 					for (b in trump.block.children) {
+						// It just works.
 						var block = trump.block.children[b];
-						tmp = block.x;
+						var tmp = block.x;
 						block.x = block.y;
 						block.y = -tmp;
 					}
@@ -161,7 +188,7 @@ function create() {
 		userToPlayer[player.user.id] = iPlayer;
 
 		iPlayer++;
-	}
+	} // ...yyyy! Howdy!
 
 	
 
@@ -171,6 +198,7 @@ function update() {
 	updateBlock();
 	updateTrump();
 	updatePlayers();
+	updateItems();
 }
 
 function updatePlayers () {
@@ -191,6 +219,12 @@ function updatePlayers () {
 	if (alivePlayers == 0) {
 		states.trumpWins();
 	}
+}
+
+function updateItems () {
+	for (p in players) {
+		game.physics.arcade.overlap(players[p], items, powerup);
+	}	
 }
 
 function updateTrump () {
@@ -221,13 +255,11 @@ function updateBlock () {
 
 function landed(){
 	if (!blockCollisionFlag && !trump.hasBlock) {
-		console.log("collision sol ou autre bloc");
 		trump.block.setAll('body.velocity.y', 0);
 		fixedBlocks.add(trump.block);
 		trump.block = game.add.group();
 		getRandomBlock(trump.block);
 		trump.hasBlock = true;
-		//console.log("end landed");
 		blockCollisionFlag = true;
 		game.sound.play('brick-landed', 0.2);
 	}
@@ -247,11 +279,6 @@ function getRandomBlock(group) {
 		var nOfBlocks = Math.floor((Math.random()*4)+1); // 1 - 4 number of blocks
 		var version3 = Math.floor((Math.random()*2)+1); // 1 - 2 type of group with 3 blocks
 		var version4 = Math.floor((Math.random()*7)+1); // 1 - 7 type of group with 4 blocks
-
-		console.log("nblocks : ", nOfBlocks);
-		console.log("v3 : ", version3);
-		console.log("v4 : ", version4);
-		console.log((new Date).getTime());
 
 		// creates sprite for each block
 		for (var i = 0; i<nOfBlocks; i++){
@@ -323,6 +350,20 @@ function getRandomBlock(group) {
 		group.enableBody = false;
 
 		return;
+}
+
+function powerup (player, item) {
+	items.timer.remove(item.destroyEvent);
+
+	switch (item.key) {}
+
+	items.timer.add(5 * Phaser.Timer.SECOND, powerdown, this, player, item);
+}
+
+function powerdown (player, item) {
+	// item-key logic	
+	items.remove(item);
+	item.destroy();
 }
 
 function render() {
