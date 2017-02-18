@@ -79,12 +79,16 @@ function create() {
 
 	platforms = game.add.group();
 	platforms.enableBody = true;
+	platforms.physicsBodyType = Phaser.Physics.ARCADE;
+	game.physics.arcade.enable(platforms);
 	var ground = platforms.create(0, game.world.height 
 		- game.cache.getImage('ground').height, 'ground');
 	ground.body.immovable = true;
 
 	walls = game.add.group();
 	walls.enableBody = true;
+	walls.physicsBodyType = Phaser.Physics.ARCADE;
+	game.physics.arcade.enable(walls);
 	var wallLeft = walls.create(0, 0, 'wall');
 	var wallRight = walls.create(game.world.width
 		- game.cache.getImage('wall').width, 0, 'wall');
@@ -93,6 +97,8 @@ function create() {
 	// Fixed blocks after walls 
 	fixedBlocks = game.add.group();
 	fixedBlocks.enableBody = true;
+	fixedBlocks.physicsBodyType = Phaser.Physics.ARCADE;
+	game.physics.arcade.enable(fixedBlocks);
 
 	items = game.add.group();
 	items.keys = ITEM_KEYS;
@@ -119,6 +125,7 @@ function create() {
 	trump.body.velocity.x = 250;
 	trump.body.bounce.x = 1;
 	trump.block = game.add.group();
+	trump.block.physicsBodyType = Phaser.Physics.ARCADE;
 	getRandomBlock(trump.block);
 	trump.hasBlock = true;
 
@@ -132,16 +139,17 @@ function create() {
 			trump.user = users[u];
 			trump.user.onAction(function(id, action) {
 				if (action == 'drop' && trump.hasBlock) {
-					var isOver = false;
-					trump.block.enableBody = true;
-					trump.block.setAll('enableBody', true);
-					game.physics.arcade.enable(trump.block);
+					if (!checkOverlapOnDrop()){
+						trump.block.enableBody = true;
+						trump.block.setAll('enableBody', true);
+						game.physics.arcade.enable(trump.block);
 
-					trump.block.setAll('body.velocity.y', 400);
-					trump.block.setAll('body.immovable', true);
-					trump.hasBlock = false;
-					game.sound.play(game.sound.trump());
-					game.sound.play('brick-drop', 0.7);
+						trump.block.setAll('body.velocity.y', 400);
+						trump.block.setAll('body.immovable', true);
+						trump.hasBlock = false;
+						game.sound.play(game.sound.trump());
+						game.sound.play('brick-drop', 0.7);
+					}
 
 				}else if(action == 'rotate' && trump.hasBlock) {
 					for (b in trump.block.children) {
@@ -266,6 +274,7 @@ function landed(){
 		trump.block.setAll('body.velocity.y', 0);
 		fixedBlocks.add(trump.block);
 		trump.block = game.add.group();
+		trump.block.physicsBodyType = Phaser.Physics.ARCADE;
 		getRandomBlock(trump.block);
 		trump.hasBlock = true;
 		blockCollisionFlag = true;
@@ -371,6 +380,26 @@ function powerdown (player, item) {
 	// item-key logic	
 	items.remove(item);
 	item.destroy();
+}
+
+
+function checkOverlapOnDrop(){
+
+	var overlaping = false;
+	trump.block.enableBody = true;
+	trump.block.setAll('enableBody', true);
+	game.physics.arcade.enable(trump.block);
+
+	for(b in fixedBlocks.children){
+		overlaping = overlaping || game.physics.arcade.overlap(trump.block, fixedBlocks.children[b]);
+	}
+
+
+	trump.block.enableBody = false;
+	trump.block.setAll('enableBody', false);
+
+	return overlaping;
+
 }
 
 function render() {
