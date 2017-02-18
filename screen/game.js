@@ -2,12 +2,15 @@ var game,
 	players,
 	trump,
 	blocks,
+	items,
 	walls,
 	platforms,
 	fixedBlocks;
 
 var BLOCK_LENGTH = 50;
 var MEXICAN_LENGTH = 45;
+
+var ITEM_KEYS = ['chili', 'tacos', 'burger'];
 
 var userToPlayer = {};
 
@@ -31,7 +34,8 @@ function preload() {
 	game.load.image("block", "assets/block_" + BLOCK_LENGTH + ".png");
 	game.load.image("mexican", "assets/mexican_" + MEXICAN_LENGTH + ".png");
 
-	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias', 'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
+	var mexicanSoundKeys = ['si-senor', 'mucho-pepito', 'tacos-gracias',
+		'ay-caramba', 'por-favor', 'jamon-pueblo', 'jajaja'];
 	for (k in mexicanSoundKeys) {
 		var key = mexicanSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -42,7 +46,8 @@ function preload() {
 		return mexicanSoundKeys[Math.floor(Math.random() * mexicanSoundKeys.length)];
 	};
 
-	var trumpSoundKeys = ['build-a-wall', 'america-great-again', 'kill-terrorist', 'mexico-pay', 'really-rich'];
+	var trumpSoundKeys = ['build-a-wall', 'america-great-again',
+		'kill-terrorist', 'mexico-pay', 'really-rich'];
 	for (k in trumpSoundKeys) {
 		var key = trumpSoundKeys[k];
 		game.load.audio(key, 'sounds/' + key + '.mp3');
@@ -89,6 +94,26 @@ function create() {
 	fixedBlocks = game.add.group();
 	fixedBlocks.enableBody = true;
 
+	items = game.add.group();
+	items.keys = ITEM_KEYS;
+	items.timer = game.time.add(new Phaser.Timer(game));
+	items.timer.loop(5 * Phaser.Timer.SECOND, function () {
+		console.log("loop");
+		console.log(items);
+		if (items.children.length < 3 && Math.random() < 0.66) {
+			var key = items.keys[Math.floor(Math.random() * items.keys.length)];
+			console.log("lucky");
+			item = items.create(Math.random() * game.world.width,
+				Math.random() * game.world.height, key);
+			item.destroyEvent = items.timer.add(10 * Phaser.Timer.SECOND,
+				function () {
+					items.remove(item);
+					item.destroy();
+			}, this);
+		} 
+	}, this);
+	items.timer.start();
+
 	trump = game.add.sprite(80, 0, 'trump');
 	game.physics.arcade.enable(trump);
 	trump.body.velocity.x = 250;
@@ -100,6 +125,7 @@ function create() {
 	players = [];
 	var iPlayer = 0;
 
+	// Heyyyyyyy...
 	for (var u in users) {
 
 		if (users[u].isTrump) {
@@ -118,7 +144,21 @@ function create() {
 					game.sound.play('brick-drop', 0.7);
 
 				}else if(action == 'rotate' && trump.hasBlock) {
-					//rotation
+					for (b in trump.block.children) {
+						// It just works.
+						var block = trump.block.children[b];
+						var tmpX, tmpY, tmp;
+						tmpX = block.x+0.5*BLOCK_LENGTH;
+						tmpY = block.y+0.5*BLOCK_LENGTH;
+
+						tmp = tmpX;
+						tmpX = tmpY;
+						tmpY = -tmp;
+
+						block.x = tmpX-0.5*BLOCK_LENGTH;
+						block.y = tmpY-0.5*BLOCK_LENGTH;
+
+					}
 				}
 			});
 
@@ -156,7 +196,7 @@ function create() {
 		userToPlayer[player.user.id] = iPlayer;
 
 		iPlayer++;
-	}
+	} // ...yyyy! Howdy!
 
 	
 
@@ -166,6 +206,7 @@ function update() {
 	updateBlock();
 	updateTrump();
 	updatePlayers();
+	updateItems();
 }
 
 function updatePlayers () {
@@ -188,6 +229,12 @@ function updatePlayers () {
 	}
 }
 
+function updateItems () {
+	for (p in players) {
+		game.physics.arcade.overlap(players[p], items, powerup);
+	}	
+}
+
 function updateTrump () {
 
 	game.physics.arcade.collide(trump, walls);
@@ -198,8 +245,9 @@ function updateBlock () {
 	
 	game.physics.arcade.collide(trump.block, platforms, landed);
 
-	
-	game.physics.arcade.collide(trump.block, players, playerHit);
+	for (p in players) {
+		game.physics.arcade.collide(trump.block, players[p], playerHit);
+	}
 	
 	if(fixedBlocks.length>0){
 		fixedBlocks.forEach(game.physics.arcade.collide, game.physics.arcade, this, trump.block, landed);
@@ -208,34 +256,28 @@ function updateBlock () {
 	
 
 	if(trump.hasBlock){
-		trump.block.x = trump.body.x+trump.body.width/2-trump.block.width/2;
-		trump.block.y = 100;
+		trump.block.x = trump.body.x+trump.body.width/2;
+		trump.block.y = 150;
 	}
 }
 
 function landed(){
 	if (!blockCollisionFlag && !trump.hasBlock) {
-		console.log("collision sol ou autre bloc");
 		trump.block.setAll('body.velocity.y', 0);
 		fixedBlocks.add(trump.block);
 		trump.block = game.add.group();
 		getRandomBlock(trump.block);
 		trump.hasBlock = true;
-		//console.log("end landed");
 		blockCollisionFlag = true;
 		game.sound.play('brick-landed', 0.2);
 	}
 	
 }
 
-function playerHit(){
-	for(p in players){
-		if(players[p].body.touching.up){
-			players[p].kill();
-			players[p].alive = false;
-
-			players[p].user.clientAction("dead");
-		}
+function playerHit(player){
+	if(player.body.touching.up){
+		player.user.clientAction("dead");
+		player.kill();
 	}
 }
 
@@ -246,21 +288,16 @@ function getRandomBlock(group) {
 		var version3 = Math.floor((Math.random()*2)+1); // 1 - 2 type of group with 3 blocks
 		var version4 = Math.floor((Math.random()*7)+1); // 1 - 7 type of group with 4 blocks
 
-		console.log("nblocks : ", nOfBlocks);
-		console.log("v3 : ", version3);
-		console.log("v4 : ", version4);
-		console.log((new Date).getTime());
-
 		// creates sprite for each block
 		for (var i = 0; i<nOfBlocks; i++){
-			group.create(i*s, 0, 'block'); //
+			group.create((i-nOfBlocks/2)*s, -0.5*s, 'block'); //
 		}
 
 		// piece of 3 blocks - 
 		if(nOfBlocks == 3 && version3 == 2){
-			group.xy(0, 0, 0);
-			group.xy(1, s, 0);
-			group.xy(2, 0, s);
+			group.xy(0, -s, -s);
+			group.xy(1, 0, -s);
+			group.xy(2, -s, 0);
 		}
 
 		if(nOfBlocks==4){
@@ -268,50 +305,49 @@ function getRandomBlock(group) {
 				case 1:
 					// ###
 					//  #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, s, s);
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, -0.5*s, 0.5*s);
 					break;
 				case 2:
 					// ###
 					// #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, 0, s);
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, -1.5*s, 0.5*s);
 					break;
 				case 3:
 					// ###
 					//   #
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, 2*s, 0);
-					group.xy(3, 2*s, s);
-					break;
+					group.xy(0, -1.5*s, -0.5*s);
+					group.xy(1, -0.5*s, -0.5*s);
+					group.xy(2, 0.5*s, -0.5*s);
+					group.xy(3, 0.5*s, 0.5*s);
 				case 4:
 					// ##
 					//  ##
-					group.xy(0, 0, 0);
-					group.xy(1, s, 0);
-					group.xy(2, s, s);
-					group.xy(3, 2*s, s);
+					group.xy(0, -1.5*s, -1*s);
+					group.xy(1, -0.5*s, -1*s);
+					group.xy(2, -0.5*s, 0);
+					group.xy(3, 0.5*s, 0);
 					break;
 				case 5:
 					//  ##
 					// ##
-					group.xy(0, s, 0);
-					group.xy(1, 2*s, 0);
-					group.xy(2, 0, s);
-					group.xy(3, s, s);
+					group.xy(0, -0.5*s, -1*s);
+					group.xy(1, 0.5*s, -1*s);
+					group.xy(2, -1.5*s, 0);
+					group.xy(3, -0.5*s, 0);
 					break;
 				case 6:
 					// ##
 					// ##
-					group.xy(0,0,0);
-					group.xy(1,s,0);
-					group.xy(2,0,s);
-					group.xy(3,s,s);
+					group.xy(0, -1*s, -1*s);
+					group.xy(1, -1*s, 0);
+					group.xy(2, 0, -1*s);
+					group.xy(3, 0, 0);
 					break;
 				default:
 					break;
@@ -321,6 +357,20 @@ function getRandomBlock(group) {
 		group.enableBody = false;
 
 		return;
+}
+
+function powerup (player, item) {
+	items.timer.remove(item.destroyEvent);
+
+	switch (item.key) {}
+
+	items.timer.add(5 * Phaser.Timer.SECOND, powerdown, this, player, item);
+}
+
+function powerdown (player, item) {
+	// item-key logic	
+	items.remove(item);
+	item.destroy();
 }
 
 function render() {
