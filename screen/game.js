@@ -8,13 +8,11 @@ var game,
 
 var BLOCK_LENGTH = 80;
 
-<<<<<<< HEAD
 var userToPlayer = {};
 
 var TOP_Y = 100;
-=======
+
 var blockCollisionFlag = false;
->>>>>>> 06f337d97336886137d4653d5c261047cbe5d800
 
 function game_init() {
 	game = new Phaser.Game(960, 800, Phaser.CANVAS,
