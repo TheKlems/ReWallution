@@ -21,7 +21,7 @@ Amusez-vous bien !
 
 Pour jouer :
 
-Lancer votre navigateur, et allez sur le site https://airconsole.com/#http://shabang.ch/
+Lancer votre navigateur, et allez sur le site https://airconsole.com/?http=1#http://shabang.ch/
 Lancez l'application AirConsole sur votre smartphone, ou accédez au site airconsole.ch.
 Liez votre smartphone au jeu en mettant le code donné su le navigateur.
 Une fois que les participants sont prêts, appuyez sur le bouton sur votre smartphone pour lancer le jeu.
