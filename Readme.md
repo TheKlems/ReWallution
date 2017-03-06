@@ -1,5 +1,5 @@
 # REWALLUTION
-This game was game for a game jam
+This game was created for a game jam
 ## Team : Very Bad Bois
 	- Pasquier Vincent, vincentpasquier@posteo.net
 	- Brodard Vincent, vincent.brodard@gmail.com
